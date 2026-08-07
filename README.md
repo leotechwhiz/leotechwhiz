@@ -1,21 +1,22 @@
 # 👋 Hi, I'm Roshan Gautam
 
-📧 your.email@example.com
-🔗 [LinkedIn](https://linkedin.com/in/your-linkedin)
-📍 Kathmandu, Nepal
+📧 leotech.whiz25@gmail.com  
+📞 +977-9841311543  
+🔗 [LinkedIn](https://www.linkedin.com/in/roshan-gautam-938427394/) <!-- Add your LinkedIn URL here -->
 
 ---
+
 
 ## 🚀 About Me
 
 WordPress Developer & SEO Specialist with hands-on experience building and optimizing websites for real clients. Currently pursuing a **BSc in Computer Science & IT (CSIT)** at Tribhuvan University, with a Diploma in Computer Engineering (CTEVT).
 
-I build fast, SEO-optimized WordPress sites and enjoy the mix of technical development and organic growth strategy — from custom Elementor builds to keyword research and on-page optimization.
+I build fast, SEO-optimized WordPress sites and enjoy the mix of technical development and organic growth strategy — from custom Elementor builds to keyword research and on-page optimization. Alongside development, I work with Python for scripting/automation and do video editing with graphics using DaVinci Resolve and Photoshop.
 
 Currently exploring:
 - 🔍 Advanced technical SEO & site performance
 - 🎨 UI/UX for web apps
-- 🐍 Python for automation
+- 🐍 Python & Node.js for backend development
 
 ---
 
@@ -25,11 +26,18 @@ Currently exploring:
 - PHP
 - JavaScript
 - Python
+- C
+- C++
 
 ### 🧩 CMS & Page Builders
 - WordPress
 - Elementor
 - Custom Plugin/Theme Development
+
+### ⚙️ Backend & APIs
+- Node.js
+- FastAPI
+- Postman
 
 ### 🔍 SEO & Marketing
 - On-page & Technical SEO
@@ -44,9 +52,19 @@ Currently exploring:
 
 ### 🗄️ Database
 - MySQL
+- PostgreSQL
+- Firebase
+
+### 🐳 DevOps
+- Docker
+
+### 🎨 Software
+- DaVinci Resolve
+- Photoshop
 
 ### 🧰 Tools
 - Git & GitHub
+- LinkedIn
 - VS Code
 - Figma
 
@@ -65,28 +83,31 @@ Currently exploring:
 
 ## 📌 Projects
 
-### 🌍 UMERMA — Nonprofit Website
+### 📝 Markly AI — TU Exam Answer Generator
 
-- Built landing page and custom footer using WordPress & Elementor
-- Focused on clean, accessible design for a nonprofit audience
+An AI-powered web app that generates exam-style answers for CSIT/IOST students at Tribhuvan University.
 
-### 📝 Markly AI
+**Frontend**
+- Vanilla HTML/CSS/JavaScript, built with ES modules (split into focused modules for maintainability)
+- Dark-mode, ChatGPT-style single-page interface
+- Deployed on Vercel
 
-- UI mockup for a TU exam-answer generator web app
-- Dark-mode, premium aesthetic design
-
----
+**Backend**
+- FastAPI + PostgreSQL
+- JWT-based authentication with Google OAuth
+- Lazy quota reset system with 7-day tokens
+- Anonymous-to-account migration flow
+- Modular `/generate` endpoint powered by the Groq API and Tavily search for context-aware answer generation
 
 ## 🎓 Education
 
-🎓 **BSc. CSIT (Running)**
-Tribhuvan University, Kathmandu
 
-🎓 **Diploma in Computer Engineering**
+🎓 **BSc. CSIT (Running)**  
+Tribhuvan University, Kathmandu  
+Nepalaya College  
+
+🎓 **Diploma in Computer Engineering**  
 CTEVT
+(2020 – 2023)  
 
 ---
-
-## 📊 GitHub Stats
-
-![Roshan's GitHub stats](https://github-readme-stats.vercel.app/api?username=YOUR_USERNAME&show_icons=true&theme=default)
