@@ -1,4 +1,4 @@
-<div align="center">
+<!-- <div align="center">
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0F2027,50:203A43,100:2C5364&height=260&section=header&text=PABIN%20DHAMI&fontSize=70&fontColor=ffffff&animation=twinkling&fontAlignY=35&desc=Software%20Engineer%20%C2%B7%20Full-Stack%20Developer%20%C2%B7%20Builder&descAlignY=55&descSize=20" width="100%"/>
 
@@ -13,7 +13,7 @@
 <img src="https://img.shields.io/badge/Nepal-Engineering%20Student-58a6ff?style=for-the-badge" />
 <img src="https://img.shields.io/badge/Status-Open%20for%20Collaboration-brightgreen?style=for-the-badge" />
 
-<br/><br/>
+<br/><br/> -->
 
 ```
 $ whoami
