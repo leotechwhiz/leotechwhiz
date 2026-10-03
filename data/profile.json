@@ -1,59 +1,54 @@
 {
   "theme": {
-    "background": "#0d1117",
-    "card_bg": "#161b22",
-    "border": "#30363d",
-    "accent": "#7ee787",
-    "accent_dim": "#238636",
-    "accent_glow": "rgba(126, 231, 135, 0.15)",
-    "text_primary": "#f0f6fc",
-    "text_secondary": "#8b949e",
-    "text_muted": "#484f58",
+    "accent1_dark": "#58a6ff",
+    "accent1_light": "#0969da",
+    "accent2_dark": "#3fb950",
+    "accent2_light": "#1a7f37",
     "font_family": "SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace"
   },
   "profile": {
     "name": "Roshan Gautam",
     "username": "leotechwhiz",
-    "role_tagline": "Full Stack Developer",
+    "role_tagline": "Full stack developer who also does SEO.",
     "terminal_title": "leo@github:~$ whoami",
     "badges": {
       "linkedin": {
         "label": "LinkedIn",
         "url": "https://www.linkedin.com/in/roshan-gautam-938427394/"
       },
-      "instagram": {
-        "label": "Instagram",
-        "url": "https://instagram.com/your-instagram"
+      "github": {
+        "label": "GitHub",
+        "url": "https://github.com/leotechwhiz"
+      },
+      "email": {
+        "label": "Email",
+        "url": "mailto:leotech.whiz25@gmail.com"
+      },
+      "portfolio": {
+        "label": "Portfolio",
+        "url": "https://www.linkedin.com/in/roshan-gautam-938427394/"
       }
     },
     "highlights": [
-      "> Digital Marketing: SEO-driven growth, content strategy and campaigns that turn traffic into results.",
-      "> Full Stack Web Apps: end-to-end products, from FastAPI/Next.js backends to responsive, polished frontends.",
-      "> SEO: technical audits, on-page optimization and WordPress builds that actually rank."
+      "> SEO: technical audits, on-page optimization & site architecture that rank.",
+      "> Full Stack Web Apps: production apps with FastAPI, Next.js & PostgreSQL.",
+      "> Digital Marketing: search & content growth strategies that drive leads."
     ],
     "stack": [
       {
-        "category": "CORE",
-        "tags": ["TypeScript", "Python", "Go", "SQL"]
+        "category": "DEV",
+        "tags": ["TypeScript", "Python", "Next.js", "FastAPI", "PostgreSQL", "Docker"]
       },
       {
-        "category": "FRONTEND",
-        "tags": ["React", "Next.js", "TailwindCSS", "HTML5/CSS3"]
-      },
-      {
-        "category": "BACKEND",
-        "tags": ["Node.js", "FastAPI", "PostgreSQL", "Redis"]
-      },
-      {
-        "category": "INFRA",
-        "tags": ["Docker", "Linux", "GitHub Actions", "AWS"]
+        "category": "SEO & TOOLS",
+        "tags": ["Search Console", "GA4", "Screaming Frog", "Ahrefs", "SEMrush"]
       }
     ],
     "projects": [
       {
         "name": "Markly AI",
         "description": "TU exam answer generator with marks-based answer lengths.",
-        "tech": "FastAPI · PostgreSQL · Groq · JS",
+        "tech": "FastAPI · PostgreSQL · Groq",
         "links": [
           { "label": "repo", "url": "https://github.com/leotechwhiz/Markly-AI" },
           { "label": "live", "url": "https://markly-ai-2.vercel.app" }
@@ -61,10 +56,19 @@
       },
       {
         "name": "Gunaso",
-        "description": "Nepal citizen complaint portal with auto-escalation & AI alerts.",
-        "tech": "Next.js · Mobile App · AI Inspection",
+        "description": "Citizen complaint portal with auto-escalation & AI inspection.",
+        "tech": "Next.js · Supabase · PWA",
         "links": [
-          { "label": "live", "url": "https://rubiso-hackthon.vercel.app" }
+          { "label": "repo", "url": "https://github.com/leotechwhiz/Gunaso" },
+          { "label": "live", "url": "https://gunaso-five.vercel.app" }
+        ]
+      },
+      {
+        "name": "SEO Case Studies",
+        "description": "Technical audits, on-page SEO frameworks & organic growth blueprints.",
+        "tech": "Technical SEO · Schema · GSC",
+        "links": [
+          { "label": "repo", "url": "https://github.com/leotechwhiz/seo-case-studies" }
         ]
       }
     ]

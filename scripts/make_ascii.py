@@ -1,19 +1,8 @@
 """Generate animated ASCII art portrait SVG from source-photo.jpg.
 
-Animation rules (pure CSS, no JS — works inside <img> on GitHub):
-  - Each ASCII row is revealed top-to-bottom with opacity fade,
-    animation-delay = row_index * 0.043s  →  total ~4.2s draw time.
-  - A glowing scanline bar tracks the current drawing row, then disappears.
-  - After the portrait finishes, a smoke layer above the cigarette tip loops forever:
-      4 text groups, each translating up 60-120px, drifting sideways,
-      scaling up, fading from 0.7 → 0, staggered delays 4-8s.
-      A feGaussianBlur filter adds softness.
-  - @media prefers-reduced-motion: show static final frame, hide scanline.
-
-Processing (Pillow only):
-  - Crop to head & shoulders, grayscale, boost contrast & sharpness.
-  - Resize to 110 cols × ~61 rows (0.51 aspect correction for monospace).
-  - Map brightness → RAMP index + fill-opacity bucket.
+Light & dark mode adaptive via CSS variables and prefers-color-scheme.
+Two accents only: Accent 1 (Blue) and Accent 2 (Green).
+Animation strictly confined to portrait draw-in and smoke looping.
 """
 
 import html
@@ -27,21 +16,16 @@ if str(REPO_ROOT) not in sys.path:
 
 from scripts.theme import THEME
 
-BG     = THEME["background"]
-BORDER = THEME["border"]
-ACCENT = THEME["accent"]
-FONT   = THEME["font_family"]
-
 WIDTH, HEIGHT = 460, 480
 COLS          = 110
 RAMP          = " .:-=+*#%@"
+FONT          = THEME.get("font_family", "monospace")
 
 
 def _process_image(path: Path):
     img = Image.open(path)
     w, h = img.size
-    # tight head-and-shoulders crop
-    crop = img.crop((int(w*.08), int(h*.02), int(w*.92), int(h*.94)))
+    crop = img.crop((int(w * .08), int(h * .02), int(w * .92), int(h * .94)))
     gray = ImageOps.grayscale(crop)
     gray = ImageEnhance.Contrast(gray).enhance(1.85)
     gray = ImageEnhance.Sharpness(gray).enhance(1.6)
@@ -63,13 +47,12 @@ def generate_ascii_svg(photo: Path, output: Path) -> None:
     line_h       = usable_h / rows
     font_size    = round(line_h * 0.98, 2)
 
-    ROW_DELAY      = 0.043               # seconds per row
-    DRAW_TIME      = round(rows * ROW_DELAY, 2)
-    SMOKE_START    = DRAW_TIME + 0.3
+    ROW_DELAY    = 0.043
+    DRAW_TIME    = round(rows * ROW_DELAY, 2)
+    SMOKE_START  = DRAW_TIME + 0.3
 
-    # Cigarette zone (right-centre, around hand/mouth)
-    CIG_R0, CIG_R1 = int(rows*.50), int(rows*.68)
-    CIG_C0, CIG_C1 = int(COLS*.44), int(COLS*.68)
+    CIG_R0, CIG_R1 = int(rows * .50), int(rows * .68)
+    CIG_C0, CIG_C1 = int(COLS * .44), int(COLS * .68)
 
     # ── build text rows ───────────────────────────────────────────────────────
     text_rows = []
@@ -88,13 +71,12 @@ def generate_ascii_svg(photo: Path, output: Path) -> None:
                 spans.append(f'<tspan fill-opacity="{cur_op:.1f}">{txt}</tspan>')
 
         for x in range(COLS):
-            b   = img.getpixel((x, y))
-            # boost cigarette
+            b = img.getpixel((x, y))
             if CIG_R0 <= y <= CIG_R1 and CIG_C0 <= x <= CIG_C1 and b >= 200:
                 ch = "=" if b < 235 else "#"
                 op = 1.0
             else:
-                ch = RAMP[int(b / 255 * (len(RAMP)-1))] if b >= 16 else " "
+                ch = RAMP[int(b / 255 * (len(RAMP) - 1))] if b >= 16 else " "
                 op = _opacity_bucket(b)
 
             if op != cur_op:
@@ -104,20 +86,18 @@ def generate_ascii_svg(photo: Path, output: Path) -> None:
                 cur_buf.append(ch)
 
         flush()
-        base_y  = round(pad_y + y * line_h + line_h * 0.82, 2)
-        delay   = round(y * ROW_DELAY, 3)
+        base_y = round(pad_y + y * line_h + line_h * 0.82, 2)
+        delay  = round(y * ROW_DELAY, 3)
         text_rows.append(
             f'  <text x="{pad_x}" y="{base_y}" class="ar"'
             f' style="animation-delay:{delay}s">{"".join(spans)}</text>'
         )
 
     # ── smoke text groups (4 staggered loops) ────────────────────────────────
-    # Approximate pixel coords for cigarette tip on the resized grid
-    tip_x = pad_x + int(COLS * 0.55 * (WIDTH - 2*pad_x) / COLS)
+    tip_x = pad_x + int(COLS * 0.55 * (WIDTH - 2 * pad_x) / COLS)
     tip_y = pad_y + int(rows * 0.57 * line_h)
 
     smoke_groups = [
-        # (x_offset, chars, duration, delay_extra, drift_x)
         (0,   ". : ~ `",  5.2, 0.0,  14),
         (-6,  "~ . ' o",  6.0, 1.4, -12),
         (4,   ": ~ ' `",  7.1, 2.7,  16),
@@ -144,19 +124,33 @@ def generate_ascii_svg(photo: Path, output: Path) -> None:
             f'{html.escape(chars)}</text>'
         )
 
-    # ── assemble SVG ─────────────────────────────────────────────────────────
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg"
      viewBox="0 0 {WIDTH} {HEIGHT}" width="100%" height="{HEIGHT}"
-     style="background:{BG};border-radius:10px;"
      role="img" aria-label="Roshan Gautam Animated ASCII Portrait">
   <defs>
     <filter id="sf">
       <feGaussianBlur stdDeviation=".45"/>
     </filter>
     <style>
+      :root {{
+        --bg: #0d1117;
+        --border: #30363d;
+        --accent1: #58a6ff;
+        --accent2: #3fb950;
+        --text-mut: #6e7681;
+      }}
+      @media (prefers-color-scheme: light) {{
+        :root {{
+          --bg: #ffffff;
+          --border: #d0d7de;
+          --accent1: #0969da;
+          --accent2: #1a7f37;
+          --text-mut: #8c959f;
+        }}
+      }}
       .ar {{
         font-family:{FONT}; font-size:{font_size}px;
-        fill:{ACCENT}; white-space:pre;
+        fill:var(--accent1); white-space:pre;
         opacity:0;
         animation:rev .12s ease-out forwards;
       }}
@@ -172,7 +166,7 @@ def generate_ascii_svg(photo: Path, output: Path) -> None:
         100% {{ opacity:0;  transform:translateY({usable_h}px) }}
       }}
       .sc {{
-        font-family:{FONT}; font-size:11px; fill:{ACCENT};
+        font-family:{FONT}; font-size:11px; fill:var(--accent2);
       }}{smoke_keyframes}
       @media(prefers-reduced-motion:reduce){{
         .ar{{ animation:none!important; opacity:1!important }}
@@ -184,13 +178,14 @@ def generate_ascii_svg(photo: Path, output: Path) -> None:
 
   <!-- border -->
   <rect x=".5" y=".5" width="{WIDTH-1}" height="{HEIGHT-1}" rx="10"
-        fill="{BG}" stroke="{BORDER}" stroke-width="1"/>
-  <!-- tiny header chrome -->
-  <circle cx="20" cy="14" r="3.5" fill="#30363d"/>
-  <circle cx="30" cy="14" r="3.5" fill="#30363d"/>
-  <circle cx="40" cy="14" r="3.5" fill="#30363d"/>
+        fill="var(--bg)" stroke="var(--border)" stroke-width="1"/>
+
+  <!-- header dots -->
+  <circle cx="20" cy="14" r="3.5" fill="#ff5f56" stroke="#e0443e" stroke-width=".5"/>
+  <circle cx="30" cy="14" r="3.5" fill="#ffbd2e" stroke="#dea123" stroke-width=".5"/>
+  <circle cx="40" cy="14" r="3.5" fill="#27c93f" stroke="#1aab29" stroke-width=".5"/>
   <text x="{WIDTH-18}" y="17" text-anchor="end"
-        font-family="{FONT}" font-size="9" fill="#484f58">leo-portrait.sh</text>
+        font-family="{FONT}" font-size="9" fill="var(--text-mut)">leo-portrait.sh</text>
 
   <!-- ascii art -->
   <g id="art">
@@ -200,8 +195,7 @@ def generate_ascii_svg(photo: Path, output: Path) -> None:
   <!-- scanline drawing head -->
   <line class="sl" x1="{pad_x}" y1="{pad_y}"
         x2="{WIDTH-pad_x}" y2="{pad_y}"
-        stroke="{ACCENT}" stroke-width="1.5"
-        filter="drop-shadow(0 0 3px {ACCENT})"/>
+        stroke="var(--accent1)" stroke-width="1.5"/>
 
   <!-- smoke layer -->
   <g id="smoke" filter="url(#sf)">

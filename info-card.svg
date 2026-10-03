@@ -1,133 +1,129 @@
 <svg xmlns="http://www.w3.org/2000/svg"
      viewBox="0 0 460 480" width="100%" height="480"
-     style="background:#0d1117;border-radius:10px;"
      role="img" aria-label="Roshan Gautam Profile Card">
   <defs>
     <style>
-      @keyframes blink {
-        0%,49% { opacity:1 } 50%,100% { opacity:0 }
+      :root {
+        --bg: #0d1117;
+        --card-bg: #161b22;
+        --border: #30363d;
+        --pill-bg: #21262d;
+        --text-pri: #f0f6fc;
+        --text-sec: #8b949e;
+        --text-mut: #6e7681;
+        --accent1: #58a6ff;
+        --accent2: #3fb950;
       }
-      @keyframes slideIn {
-        from { opacity:0; transform:translateY(9px) }
-        to   { opacity:1; transform:translateY(0)   }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #ffffff;
+          --card-bg: #f6f8fa;
+          --border: #d0d7de;
+          --pill-bg: #eaeef2;
+          --text-pri: #1f2328;
+          --text-sec: #57606a;
+          --text-mut: #8c959f;
+          --accent1: #0969da;
+          --accent2: #1a7f37;
+        }
       }
-      .cursor  { fill:#7ee787; animation:blink 1s steps(1) infinite }
-      .s0 { opacity:0; animation:slideIn .5s ease-out .15s forwards }
-      .s1 { opacity:0; animation:slideIn .5s ease-out .55s forwards }
-      .s2 { opacity:0; animation:slideIn .5s ease-out .95s forwards }
-      .s3 { opacity:0; animation:slideIn .5s ease-out 1.35s forwards }
-      @media(prefers-reduced-motion:reduce){
-        .s0,.s1,.s2,.s3{ animation:none!important; opacity:1!important }
-        .cursor{ animation:none!important; opacity:1!important }
-      }
-      .ah  { font:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:10px; font-weight:700; fill:#7ee787; letter-spacing:1.2px }
-      .bm  { font:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:10.5px; font-weight:700; fill:#7ee787 }
-      .bt  { font:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:9px; fill:#c9d1d9 }
-      .cl  { font:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:8.5px; font-weight:700; fill:#8b949e; letter-spacing:.8px }
-      .tt  { font:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:8.5px; fill:#c9d1d9 }
-      .pt  { font:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:11px; font-weight:700; fill:#f0f6fc }
-      .pl  { font:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:9px; fill:#7ee787; font-weight:500 }
-      .pd  { font:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:9px; fill:#c9d1d9 }
-      .pk  { font:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:8.5px; fill:#8b949e }
-      .st  { font:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:9px; fill:#484f58 }
-      .tc  { font:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:11px; fill:#8b949e; font-weight:600 }
+      .ah { font-family:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:10px; font-weight:700; fill:var(--accent1); letter-spacing:1.2px }
+      .bm { font-family:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:10.5px; font-weight:700; fill:var(--accent2) }
+      .bt { font-family:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:9px; fill:var(--text-pri) }
+      .cl { font-family:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:8.5px; font-weight:700; fill:var(--text-sec); letter-spacing:.8px }
+      .tt { font-family:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:8.5px; fill:var(--text-pri) }
+      .pt { font-family:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:10.5px; font-weight:700; fill:var(--text-pri) }
+      .pl { font-family:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:8.5px; fill:var(--accent1); font-weight:500 }
+      .pd { font-family:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:8.5px; fill:var(--text-sec) }
+      .pk { font-family:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:8px; fill:var(--accent2) }
+      .st { font-family:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:8.5px; fill:var(--text-mut) }
+      .tc { font-family:SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size:11px; fill:var(--text-sec); font-weight:600 }
     </style>
   </defs>
 
   <!-- card background -->
   <rect x=".5" y=".5" width="459" height="479" rx="10"
-        fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+        fill="var(--bg)" stroke="var(--border)" stroke-width="1"/>
 
   <!-- terminal title bar -->
   <path d="M.5 10.5A10 10 0 0 1 10.5.5L449.5.5A10 10 0 0 1 459.5 10.5V32.5H.5Z"
-        fill="#161b22"/>
-  <line x1=".5" y1="32.5" x2="459.5" y2="32.5" stroke="#30363d" stroke-width="1"/>
+        fill="var(--card-bg)"/>
+  <line x1=".5" y1="32.5" x2="459.5" y2="32.5" stroke="var(--border)" stroke-width="1"/>
 
   <!-- window dots -->
   <circle cx="20" cy="16.5" r="4.5" fill="#ff5f56" stroke="#e0443e" stroke-width=".5"/>
   <circle cx="34" cy="16.5" r="4.5" fill="#ffbd2e" stroke="#dea123" stroke-width=".5"/>
   <circle cx="48" cy="16.5" r="4.5" fill="#27c93f" stroke="#1aab29" stroke-width=".5"/>
 
-  <!-- prompt + blinking cursor -->
+  <!-- prompt static (no animation) -->
   <text x="66" y="20.5" class="tc">
-    <tspan fill="#7ee787">leo</tspan><tspan fill="#484f58">@</tspan><tspan fill="#f0f6fc">github</tspan><tspan fill="#484f58">:~$</tspan>
-    <tspan fill="#f0f6fc"> whoami</tspan><tspan class="cursor">_</tspan>
+    <tspan fill="var(--accent1)">roshan</tspan><tspan fill="var(--text-mut)">@</tspan><tspan fill="var(--text-pri)">github</tspan><tspan fill="var(--text-mut)">:~$</tspan>
+    <tspan fill="var(--text-pri)"> whoami</tspan><tspan fill="var(--accent1)">_</tspan>
   </text>
 
-  <g class="s0">
-    <text x="22" y="50" class="ah">// HIGHLIGHTS</text>
-    <text x="24" y="65" class="bm">&gt;</text>
-    <text x="36" y="65" class="bt">Digital Marketing: SEO-driven growth, content</text>
-    <text x="36" y="77" class="bt">strategy and campaigns that turn traffic into</text>
-    <text x="36" y="89" class="bt">results.</text>
-    <text x="24" y="106" class="bm">&gt;</text>
-    <text x="36" y="106" class="bt">Full Stack Web Apps: end-to-end products, from</text>
-    <text x="36" y="118" class="bt">FastAPI/Next.js backends to responsive, polished</text>
-    <text x="36" y="130" class="bt">frontends.</text>
-    <text x="24" y="147" class="bm">&gt;</text>
-    <text x="36" y="147" class="bt">SEO: technical audits, on-page optimization and</text>
-    <text x="36" y="159" class="bt">WordPress builds that actually rank.</text>
+  <g id="highlights">
+    <text x="22" y="50" class="ah">// FOCUS AREAS</text>
+    <text x="24" y="64" class="bm">&gt;</text>
+    <text x="36" y="64.0" class="bt">SEO: technical audits, on-page optimization &amp; site</text>
+    <text x="36" y="75.5" class="bt">architecture that rank.</text>
+    <text x="24" y="91.0" class="bm">&gt;</text>
+    <text x="36" y="91.0" class="bt">Full Stack Web Apps: production apps with FastAPI,</text>
+    <text x="36" y="102.5" class="bt">Next.js &amp; PostgreSQL.</text>
+    <text x="24" y="118.0" class="bm">&gt;</text>
+    <text x="36" y="118.0" class="bt">Digital Marketing: search &amp; content growth strategies</text>
+    <text x="36" y="129.5" class="bt">that drive leads.</text>
   </g>
-  <g class="s1">
-    <text x="22" y="180" class="ah">// TECH STACK</text>
-    <rect x="22" y="184" width="62" height="15" rx="3" fill="#161b22" stroke="#30363d" stroke-width=".8"/>
-    <text x="26" y="195" class="cl">CORE</text>
-    <rect x="89" y="184" width="61.0" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="94" y="195" class="tt">TypeScript</text>
-    <rect x="154.0" y="184" width="40.6" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="159.0" y="195" class="tt">Python</text>
-    <rect x="198.6" y="184" width="20.2" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="203.6" y="195" class="tt">Go</text>
-    <rect x="222.79999999999998" y="184" width="25.3" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="227.79999999999998" y="195" class="tt">SQL</text>
-    <rect x="22" y="203" width="62" height="15" rx="3" fill="#161b22" stroke="#30363d" stroke-width=".8"/>
-    <text x="26" y="214" class="cl">FRONTEND</text>
-    <rect x="89" y="203" width="35.5" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="94" y="214" class="tt">React</text>
-    <rect x="128.5" y="203" width="45.7" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="133.5" y="214" class="tt">Next.js</text>
-    <rect x="178.2" y="203" width="66.1" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="183.2" y="214" class="tt">TailwindCSS</text>
-    <rect x="248.29999999999998" y="203" width="61.0" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="253.29999999999998" y="214" class="tt">HTML5/CSS3</text>
-    <rect x="22" y="222" width="62" height="15" rx="3" fill="#161b22" stroke="#30363d" stroke-width=".8"/>
-    <text x="26" y="233" class="cl">BACKEND</text>
-    <rect x="89" y="222" width="45.7" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="94" y="233" class="tt">Node.js</text>
-    <rect x="138.7" y="222" width="45.7" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="143.7" y="233" class="tt">FastAPI</text>
-    <rect x="188.39999999999998" y="222" width="61.0" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="193.39999999999998" y="233" class="tt">PostgreSQL</text>
-    <rect x="253.39999999999998" y="222" width="35.5" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="258.4" y="233" class="tt">Redis</text>
-    <rect x="22" y="241" width="62" height="15" rx="3" fill="#161b22" stroke="#30363d" stroke-width=".8"/>
-    <text x="26" y="252" class="cl">INFRA</text>
-    <rect x="89" y="241" width="40.6" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="94" y="252" class="tt">Docker</text>
-    <rect x="133.6" y="241" width="35.5" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="138.6" y="252" class="tt">Linux</text>
-    <rect x="173.1" y="241" width="81.4" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="178.1" y="252" class="tt">GitHub Actions</text>
-    <rect x="258.5" y="241" width="25.3" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width=".8"/>
-    <text x="263.5" y="252" class="tt">AWS</text>
+  <g id="stack">
+    <text x="22" y="149.0" class="ah">// TECH &amp; TOOLS</text>
+    <rect x="22" y="153.0" width="72" height="14" rx="3" fill="var(--card-bg)" stroke="var(--border)" stroke-width=".8"/>
+    <text x="26" y="163.0" class="cl">DEV</text>
+    <rect x="99" y="153.0" width="58.0" height="14" rx="3" fill="var(--pill-bg)" stroke="var(--border)" stroke-width=".8"/>
+    <text x="104" y="163.0" class="tt">TypeScript</text>
+    <rect x="161.0" y="153.0" width="38.8" height="14" rx="3" fill="var(--pill-bg)" stroke="var(--border)" stroke-width=".8"/>
+    <text x="166.0" y="163.0" class="tt">Python</text>
+    <rect x="203.8" y="153.0" width="43.6" height="14" rx="3" fill="var(--pill-bg)" stroke="var(--border)" stroke-width=".8"/>
+    <text x="208.8" y="163.0" class="tt">Next.js</text>
+    <rect x="251.4" y="153.0" width="43.6" height="14" rx="3" fill="var(--pill-bg)" stroke="var(--border)" stroke-width=".8"/>
+    <text x="256.4" y="163.0" class="tt">FastAPI</text>
+    <rect x="299.0" y="153.0" width="58.0" height="14" rx="3" fill="var(--pill-bg)" stroke="var(--border)" stroke-width=".8"/>
+    <text x="304.0" y="163.0" class="tt">PostgreSQL</text>
+    <rect x="361.0" y="153.0" width="38.8" height="14" rx="3" fill="var(--pill-bg)" stroke="var(--border)" stroke-width=".8"/>
+    <text x="366.0" y="163.0" class="tt">Docker</text>
+    <rect x="22" y="171.0" width="72" height="14" rx="3" fill="var(--card-bg)" stroke="var(--border)" stroke-width=".8"/>
+    <text x="26" y="181.0" class="cl">SEO &amp; TOOLS</text>
+    <rect x="99" y="171.0" width="77.2" height="14" rx="3" fill="var(--pill-bg)" stroke="var(--border)" stroke-width=".8"/>
+    <text x="104" y="181.0" class="tt">Search Console</text>
+    <rect x="180.2" y="171.0" width="24.4" height="14" rx="3" fill="var(--pill-bg)" stroke="var(--border)" stroke-width=".8"/>
+    <text x="185.2" y="181.0" class="tt">GA4</text>
+    <rect x="208.6" y="171.0" width="77.2" height="14" rx="3" fill="var(--pill-bg)" stroke="var(--border)" stroke-width=".8"/>
+    <text x="213.6" y="181.0" class="tt">Screaming Frog</text>
+    <rect x="289.8" y="171.0" width="38.8" height="14" rx="3" fill="var(--pill-bg)" stroke="var(--border)" stroke-width=".8"/>
+    <text x="294.8" y="181.0" class="tt">Ahrefs</text>
+    <rect x="332.6" y="171.0" width="43.6" height="14" rx="3" fill="var(--pill-bg)" stroke="var(--border)" stroke-width=".8"/>
+    <text x="337.6" y="181.0" class="tt">SEMrush</text>
   </g>
-  <g class="s2">
-    <text x="22" y="277" class="ah">// FEATURED PROJECTS</text>
-    <circle cx="26" cy="288.5" r="2" fill="#7ee787"/>
-    <text x="35" y="292" class="pt">Markly AI</text>
-    <text x="438" y="292" class="pl" text-anchor="end">[repo ↗]  [live ↗]</text>
-    <text x="35" y="305" class="pd">TU exam answer generator with marks-based answer lengths.</text>
-    <text x="35" y="317" class="pk">⚡ FastAPI · PostgreSQL · Groq · JS</text>
-    <circle cx="26" cy="328.5" r="2" fill="#7ee787"/>
-    <text x="35" y="332" class="pt">Gunaso</text>
-    <text x="438" y="332" class="pl" text-anchor="end">[live ↗]</text>
-    <text x="35" y="345" class="pd">Nepal citizen complaint portal with auto-escalation &amp; AI alerts.</text>
-    <text x="35" y="357" class="pk">⚡ Next.js · Mobile App · AI Inspection</text>
+  <g id="projects">
+    <text x="22" y="205.0" class="ah">// FEATURED WORK</text>
+    <circle cx="26" cy="215.5" r="2" fill="var(--accent1)"/>
+    <text x="35" y="219.0" class="pt">Markly AI</text>
+    <text x="438" y="219.0" class="pl" text-anchor="end">[repo ↗]  [live ↗]</text>
+    <text x="35" y="230.0" class="pd">TU exam answer generator with marks-based answer lengths.</text>
+    <text x="35" y="240.0" class="pk">⚡ FastAPI · PostgreSQL · Groq</text>
+    <circle cx="26" cy="248.5" r="2" fill="var(--accent1)"/>
+    <text x="35" y="252.0" class="pt">Gunaso</text>
+    <text x="438" y="252.0" class="pl" text-anchor="end">[repo ↗]  [live ↗]</text>
+    <text x="35" y="263.0" class="pd">Citizen complaint portal with auto-escalation &amp; AI inspection.</text>
+    <text x="35" y="273.0" class="pk">⚡ Next.js · Supabase · PWA</text>
+    <circle cx="26" cy="281.5" r="2" fill="var(--accent1)"/>
+    <text x="35" y="285.0" class="pt">SEO Case Studies</text>
+    <text x="438" y="285.0" class="pl" text-anchor="end">[repo ↗]</text>
+    <text x="35" y="296.0" class="pd">Technical audits, on-page SEO frameworks &amp; organic growth blueprints.</text>
+    <text x="35" y="306.0" class="pk">⚡ Technical SEO · Schema · GSC</text>
   </g>
-  <g class="s3">
-    <line x1="22" y1="456" x2="438" y2="456" stroke="#21262d" stroke-width="1"/>
-    <circle cx="27" cy="468" r="3" fill="#7ee787"/>
-    <text x="36" y="471" class="st">status: active &amp; shipping</text>
-    <text x="438" y="471" class="st" text-anchor="end">sys: linux · term: zsh</text>
+  <g id="footer">
+    <line x1="22" y1="458" x2="438" y2="458" stroke="var(--border)" stroke-width="1"/>
+    <circle cx="27" cy="469" r="3" fill="var(--accent2)"/>
+    <text x="36" y="472" class="st">status: open for full stack &amp; SEO roles</text>
+    <text x="438" y="472" class="st" text-anchor="end">Kathmandu, Nepal</text>
   </g>
 </svg>
