@@ -12,49 +12,28 @@
     "font_family": "SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace"
   },
   "profile": {
-    "name": "Leo",
+    "name": "Roshan Gautam",
     "username": "leotechwhiz",
-    "role_tagline": "Developer · SEO · Builder",
-    "terminal_title": "leo@github:~$ whoami",
-    "badges": [
-      {
+    "role_tagline": "Full Stack Developer",
+    "terminal_title": "roshan@github:~$ whoami",
+    "badges": {
+      "portfolio": {
         "label": "Portfolio",
-        "url": "https://leo.dev",
-        "logo": "safari"
+        "url": "https://yourportfolio.com"
       },
-      {
+      "linkedin": {
         "label": "LinkedIn",
-        "url": "https://linkedin.com/in/leotechwhiz",
-        "logo": "linkedin"
+        "url": "https://linkedin.com/in/your-linkedin"
       },
-      {
+      "instagram": {
         "label": "Instagram",
-        "url": "https://instagram.com/leotechwhiz",
-        "logo": "instagram"
+        "url": "https://instagram.com/your-instagram"
       },
-      {
+      "github": {
         "label": "GitHub",
-        "url": "https://github.com/leotechwhiz",
-        "logo": "github"
+        "url": "https://github.com/leotechwhiz"
       }
-    ],
-    "experience": [
-      {
-        "role": "Lead Software Engineer",
-        "company": "Nexus Systems",
-        "years": "2023 - Present"
-      },
-      {
-        "role": "Full-Stack Developer",
-        "company": "VentureScale Labs",
-        "years": "2021 - 2023"
-      },
-      {
-        "role": "Frontend & SEO Engineer",
-        "company": "GrowthCraft Studio",
-        "years": "2019 - 2021"
-      }
-    ],
+    },
     "stack": [
       {
         "category": "CORE",
@@ -73,11 +52,29 @@
         "tags": ["Docker", "Linux", "GitHub Actions", "AWS"]
       }
     ],
+    "projects": [
+      {
+        "name": "Markly AI",
+        "description": "TU exam answer generator with marks-based answer lengths.",
+        "tech": "FastAPI · PostgreSQL · Groq · JS",
+        "links": [
+          { "label": "repo", "url": "https://github.com/leotechwhiz/Markly-AI" },
+          { "label": "live", "url": "https://markly-ai-2.vercel.app" }
+        ]
+      },
+      {
+        "name": "Gunaso",
+        "description": "Nepal citizen complaint portal with auto-escalation & AI alerts.",
+        "tech": "Next.js · Mobile App · AI Inspection",
+        "links": [
+          { "label": "live", "url": "https://rubiso-hackthon.vercel.app" }
+        ]
+      }
+    ],
     "highlights": [
+      "> Spearheaded technical SEO revamp boosting organic impressions by 180%",
       "> Architected high-throughput microservices handling 10M+ daily events",
-      "> Spearheaded technical SEO revamp boosting organic search impressions by 180%",
-      "> Built automated CI/CD and deployment toolchains with sub-minute rollouts",
-      "> Exploring agentic AI systems, distributed caching, and modern web architectures"
+      "> Open-source builder exploring agentic AI workflows & modern infra"
     ]
   }
 }

@@ -1,15 +1,22 @@
-"""Fetch last 12 months of GitHub contributions and render contrib-heatmap.svg.
+"""Fetch real 12-month GitHub contributions for @leotechwhiz and render contrib-heatmap.svg.
 
-Uses GitHub GraphQL API when GITHUB_TOKEN is available.
-Gracefully falls back to realistic contribution dataset if running offline/without token.
-Draws a 53x7 grid of rounded squares with 5-level scale, month labels, day labels,
-and a 'Less ... More' legend, using the shared repository theme.
+Strict requirements:
+- Queries GitHub GraphQL API for user 'leotechwhiz'
+- Last 12 months with from/to parameters
+- Maps real contributionCount to 5-level scale:
+    Level 0 = empty (0 contributions)
+    Level 1 = 1 to Q1
+    Level 2 = Q1+1 to Q2
+    Level 3 = Q2+1 to Q3
+    Level 4 = Q3+1 to max (quartiles of user's own max)
+- No mock data or random fallback: exits with a clear error if GH_TOKEN is missing or API fails
+- Reads token strictly from GH_TOKEN env var
+- Displays real total contribution count in SVG header
 """
 
 import datetime
 import html
 import os
-import random
 import sys
 from pathlib import Path
 import requests
@@ -20,12 +27,11 @@ if str(REPO_ROOT) not in sys.path:
 
 from scripts.theme import THEME, PROFILE
 
-# Theme & dimensions
+# Theme & Dimensions
 WIDTH = 880
 HEIGHT = 180
 
 BG_COLOR = THEME.get("background", "#0d1117")
-CARD_BG = THEME.get("card_bg", "#161b22")
 BORDER_COLOR = THEME.get("border", "#30363d")
 ACCENT_COLOR = THEME.get("accent", "#7ee787")
 TEXT_PRIMARY = THEME.get("text_primary", "#f0f6fc")
@@ -33,27 +39,25 @@ TEXT_SECONDARY = THEME.get("text_secondary", "#8b949e")
 TEXT_MUTED = THEME.get("text_muted", "#484f58")
 FONT_FAMILY = THEME.get("font_family", "SFMono-Regular, Consolas, monospace")
 
-# 5-level color scale
 COLOR_LEVELS = [
-    "#161b22",  # Level 0 (None)
-    "#0e4429",  # Level 1
-    "#006d32",  # Level 2
-    "#26a641",  # Level 3
-    ACCENT_COLOR,  # Level 4 (Max accent)
+    "#161b22",  # Level 0 (0 contributions)
+    "#0e4429",  # Level 1 (1st quartile)
+    "#006d32",  # Level 2 (2nd quartile)
+    "#26a641",  # Level 3 (3rd quartile)
+    ACCENT_COLOR,  # Level 4 (4th quartile / max)
 ]
 
 GRAPHQL_QUERY = """
-query($login: String!) {
+query($login: String!, $from: DateTime!, $to: DateTime!) {
   user(login: $login) {
-    contributionsCollection {
+    contributionsCollection(from: $from, to: $to) {
       contributionCalendar {
         totalContributions
         weeks {
           contributionDays {
-            contributionCount
             date
+            contributionCount
             weekday
-            contributionLevel
           }
         }
       }
@@ -65,127 +69,109 @@ query($login: String!) {
 MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 
-def fetch_contributions_graphql(username: str, token: str):
-    """Fetch calendar from GitHub GraphQL API."""
+def fetch_real_contributions(username: str, token: str):
+    """Query GitHub GraphQL API for the exact last 12 months of contributions."""
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
+    to_date = now_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+    from_date = (now_utc - datetime.timedelta(days=365)).strftime("%Y-%m-%dT%H:%M:%SZ")
+
     url = "https://api.github.com/graphql"
     headers = {
         "Authorization": f"Bearer {token}",
-        "User-Agent": "leotechwhiz-profile-readme-generator",
+        "User-Agent": "leotechwhiz-profile-heatmap-fetcher",
     }
-    response = requests.post(
-        url,
-        json={"query": GRAPHQL_QUERY, "variables": {"login": username}},
-        headers=headers,
-        timeout=10,
-    )
-    response.raise_for_status()
+    payload = {
+        "query": GRAPHQL_QUERY,
+        "variables": {
+            "login": username,
+            "from": from_date,
+            "to": to_date,
+        },
+    }
+
+    try:
+        response = requests.post(url, json=payload, headers=headers, timeout=15)
+        response.raise_for_status()
+    except Exception as exc:
+        sys.stderr.write(f"GitHub API HTTP error: {exc}\n")
+        sys.exit(1)
+
     data = response.json()
     if "errors" in data:
-        raise RuntimeError(f"GraphQL returned errors: {data['errors']}")
-    calendar = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]
+        sys.stderr.write(f"GitHub GraphQL query error: {data['errors']}\n")
+        sys.exit(1)
+
+    user_data = data.get("data", {}).get("user")
+    if not user_data:
+        sys.stderr.write(f"User '{username}' not found on GitHub or inaccessible with token.\n")
+        sys.exit(1)
+
+    collection = user_data.get("contributionsCollection")
+    if not collection:
+        sys.stderr.write(f"No contributionsCollection found for '{username}'.\n")
+        sys.exit(1)
+
+    calendar = collection.get("contributionCalendar")
+    if not calendar:
+        sys.stderr.write(f"No contributionCalendar returned for '{username}'.\n")
+        sys.exit(1)
+
     return calendar
 
 
-def generate_fallback_calendar(username: str):
-    """Generate realistic 53-week contribution calendar for demo / offline use."""
-    # Seed by username to ensure deterministic output
-    rng = random.Random(hash(username) & 0xFFFFFFFF)
-    today = datetime.date.today()
-
-    weeks = []
-    total_contributions = 0
-
-    # 53 weeks ending with today
-    start_date = today - datetime.timedelta(days=52 * 7 + today.weekday())
-
-    current_date = start_date
-    for _ in range(53):
-        days = []
-        for wd in range(7):
-            if current_date > today:
-                break
-            # Weighted random activity
-            roll = rng.random()
-            if wd in [5, 6]:  # Weekend
-                if roll < 0.55:
-                    count = 0
-                    lvl = 0
-                elif roll < 0.85:
-                    count = rng.randint(1, 3)
-                    lvl = 1
-                else:
-                    count = rng.randint(4, 8)
-                    lvl = 2
-            else:  # Weekday
-                if roll < 0.20:
-                    count = 0
-                    lvl = 0
-                elif roll < 0.55:
-                    count = rng.randint(1, 4)
-                    lvl = 1
-                elif roll < 0.82:
-                    count = rng.randint(5, 9)
-                    lvl = 2
-                elif roll < 0.94:
-                    count = rng.randint(10, 15)
-                    lvl = 3
-                else:
-                    count = rng.randint(16, 24)
-                    lvl = 4
-
-            total_contributions += count
-            days.append({
-                "contributionCount": count,
-                "date": current_date.strftime("%Y-%m-%d"),
-                "weekday": wd,
-                "level": lvl,
-            })
-            current_date += datetime.timedelta(days=1)
-
-        weeks.append({"contributionDays": days})
-
-    return {
-        "totalContributions": total_contributions,
-        "weeks": weeks,
-    }
-
-
-def map_level_to_int(level_str: str) -> int:
-    mapping = {
-        "NONE": 0,
-        "FIRST_QUARTILE": 1,
-        "SECOND_QUARTILE": 2,
-        "THIRD_QUARTILE": 3,
-        "FOURTH_QUARTILE": 4,
-    }
-    return mapping.get(level_str, 0)
+def map_count_to_level(count: int, q1: int, q2: int, q3: int) -> int:
+    """Map count to 0-4 based on quartiles of user's own maximum."""
+    if count <= 0:
+        return 0
+    if count <= q1:
+        return 1
+    if count <= q2:
+        return 2
+    if count <= q3:
+        return 3
+    return 4
 
 
 def generate_heatmap_svg(output_path: Path):
     username = PROFILE.get("username", "leotechwhiz")
-    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
 
-    calendar = None
-    if token:
-        try:
-            print(f"Fetching GitHub contribution data for @{username}...")
-            calendar = fetch_contributions_graphql(username, token)
-            print(f"Successfully fetched {calendar.get('totalContributions', 0)} contributions.")
-        except Exception as e:
-            print(f"Notice: Failed to fetch via GraphQL API ({e}). Falling back to generated activity data.")
+    # Read token strictly from GH_TOKEN
+    token = os.environ.get("GH_TOKEN")
+    if not token:
+        sys.stderr.write(
+            "ERROR: 'GH_TOKEN' environment variable is not set.\n"
+            "This script requires a valid GitHub token (GH_TOKEN) to fetch real contribution data.\n"
+            "Never generating mock or placeholder data.\n"
+        )
+        sys.exit(1)
 
-    if not calendar:
-        print("Using synthesized contribution data for @leotechwhiz.")
-        calendar = generate_fallback_calendar(username)
+    print(f"Fetching real GitHub contribution data for @{username}...")
+    calendar = fetch_real_contributions(username, token)
 
     total_count = calendar.get("totalContributions", 0)
     weeks = calendar.get("weeks", [])
 
-    # Keep last 53 weeks
     if len(weeks) > 53:
         weeks = weeks[-53:]
 
-    # Grid layout parameters
+    # Calculate max count and quartiles of user's own max
+    max_count = 0
+    for week in weeks:
+        for day in week.get("contributionDays", []):
+            cnt = day.get("contributionCount", 0)
+            if cnt > max_count:
+                max_count = cnt
+
+    if max_count <= 0:
+        q1, q2, q3 = 1, 2, 3
+    else:
+        q1 = max(1, int(round(max_count * 0.25)))
+        q2 = max(q1 + 1, int(round(max_count * 0.50)))
+        q3 = max(q2 + 1, int(round(max_count * 0.75)))
+
+    print(f"Total contributions: {total_count}, Max in a day: {max_count} (Quartiles: Q1={q1}, Q2={q2}, Q3={q3})")
+
+    # Layout parameters
     square_size = 10.5
     cell_gap = 3.5
     stride = square_size + cell_gap
@@ -209,7 +195,7 @@ def generate_heatmap_svg(output_path: Path):
   <!-- Background and Border -->
   <rect x="0.5" y="0.5" width="{WIDTH - 1}" height="{HEIGHT - 1}" rx="10" fill="{BG_COLOR}" stroke="{BORDER_COLOR}" stroke-width="1"/>
 
-  <!-- Header -->
+  <!-- Header with Real Total Contributions -->
   <g id="heatmap-header">
     <circle cx="24" cy="24" r="4" fill="{ACCENT_COLOR}"/>
     <text x="36" y="27.5" class="heat-title">CONTRIBUTIONS <tspan class="heat-count">({total_count:,} in the last year)</tspan></text>
@@ -217,13 +203,12 @@ def generate_heatmap_svg(output_path: Path):
   </g>
 """)
 
-    # Day of week labels (Mon, Wed, Fri)
+    # Day labels (Mon, Wed, Fri)
     day_labels = [("Mon", 1), ("Wed", 3), ("Fri", 5)]
     for label, day_idx in day_labels:
         label_y = grid_start_y + (day_idx * stride) + 8.5
         svg_parts.append(f'  <text x="20" y="{label_y:.1f}" class="day-text">{label}</text>')
 
-    # Month labels along top of grid
     last_month = None
     month_svg_tags = []
     grid_cells_svg = []
@@ -232,7 +217,7 @@ def generate_heatmap_svg(output_path: Path):
         col_x = grid_start_x + (w_idx * stride)
         days = week.get("contributionDays", [])
 
-        # Check month change for header label
+        # Month labels
         for day in days:
             date_str = day.get("date", "")
             if date_str:
@@ -245,25 +230,18 @@ def generate_heatmap_svg(output_path: Path):
                     )
                 break
 
-        # Draw 7 squares for each week
+        # Week cells
         for day in days:
             weekday = day.get("weekday", 0)
-            # GitHub weekdays: 0 is Sunday, 6 is Saturday
             row_y = grid_start_y + (weekday * stride)
-
-            if "level" in day:
-                lvl = day["level"]
-            else:
-                lvl = map_level_to_int(day.get("contributionLevel", "NONE"))
-
-            lvl = max(0, min(4, lvl))
+            cnt = day.get("contributionCount", 0)
+            lvl = map_count_to_level(cnt, q1, q2, q3)
             cell_color = COLOR_LEVELS[lvl]
-            count = day.get("contributionCount", 0)
             date_val = day.get("date", "")
 
             stroke_attr = f'stroke="{BORDER_COLOR}" stroke-width="0.5"' if lvl == 0 else ""
             grid_cells_svg.append(
-                f'    <rect class="cell" x="{col_x:.1f}" y="{row_y:.1f}" width="{square_size}" height="{square_size}" rx="2.5" fill="{cell_color}" {stroke_attr}><title>{count} contributions on {date_val}</title></rect>'
+                f'    <rect class="cell" x="{col_x:.1f}" y="{row_y:.1f}" width="{square_size}" height="{square_size}" rx="2.5" fill="{cell_color}" {stroke_attr}><title>{cnt} contributions on {date_val}</title></rect>'
             )
 
     svg_parts.append("  <!-- Month Labels -->")
@@ -298,7 +276,7 @@ def generate_heatmap_svg(output_path: Path):
     with open(output_path, "w", encoding="utf-8") as f:
         f.write("\n".join(svg_parts))
 
-    print(f"Successfully generated contrib-heatmap.svg at: {output_path}")
+    print(f"Successfully generated contrib-heatmap.svg at: {output_path} with REAL GitHub data.")
 
 
 if __name__ == "__main__":

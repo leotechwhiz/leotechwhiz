@@ -27,9 +27,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests Pillow
 
-      - name: Generate updated contribution heatmap
+      - name: Generate updated contribution heatmap from real GitHub data
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           python scripts/make_heatmap.py
 
@@ -41,6 +41,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes in contrib-heatmap.svg"
           else
-            git commit -m "chore(heatmap): refresh contribution activity [skip ci]"
+            git commit -m "chore(heatmap): refresh contribution activity with real data [skip ci]"
             git push
           fi
