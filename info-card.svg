@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 480" width="100%" height="480" style="background-color: #0d1117; border-radius: 10px;" role="img" aria-label="Leo Profile Information Card">
+  <defs>
+    <style>
+      .mono { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; }
+      .accent-head { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 10px; font-weight: 700; fill: #7ee787; letter-spacing: 1.2px; }
+      .role-title { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 11px; font-weight: 600; fill: #f0f6fc; }
+      .company-text { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 10.5px; fill: #8b949e; }
+      .years-text { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9.5px; fill: #7ee787; font-weight: 500; text-anchor: end; }
+      .cat-label { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9px; font-weight: 700; fill: #8b949e; letter-spacing: 0.8px; }
+      .tag-text { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9.5px; fill: #c9d1d9; }
+      .bullet-marker { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 11px; font-weight: 700; fill: #7ee787; }
+      .bullet-text { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 10px; fill: #c9d1d9; }
+      .term-cmd { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 11px; fill: #8b949e; font-weight: 600; }
+      .term-user { fill: #7ee787; }
+      .status-text { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9.5px; fill: #484f58; }
+    </style>
+  </defs>
+
+  <!-- Card Background & 1px Border -->
+  <rect x="0.5" y="0.5" width="459" height="479" rx="10" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Faux Terminal Title Bar -->
+  <path d="M 0.5 10.5 A 10 10 0 0 1 10.5 0.5 L 449.5 0.5 A 10 10 0 0 1 459.5 10.5 L 459.5 32.5 L 0.5 32.5 Z" fill="#161b22" />
+  <line x1="0.5" y1="32.5" x2="459.5" y2="32.5" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Terminal Window Dots -->
+  <circle cx="20" cy="16.5" r="4.5" fill="#ff5f56" stroke="#e0443e" stroke-width="0.5"/>
+  <circle cx="34" cy="16.5" r="4.5" fill="#ffbd2e" stroke="#dea123" stroke-width="0.5"/>
+  <circle cx="48" cy="16.5" r="4.5" fill="#27c93f" stroke="#1aab29" stroke-width="0.5"/>
+
+  <!-- Terminal Command -->
+  <text x="66" y="20.5" class="term-cmd">
+    <tspan class="term-user">leo</tspan><tspan fill="#484f58">@</tspan><tspan fill="#f0f6fc">github</tspan><tspan fill="#484f58">:~$</tspan> <tspan fill="#f0f6fc">whoami</tspan>
+  </text>
+
+
+  <!-- SECTION: EXPERIENCE -->
+  <g id="section-experience">
+    <text x="22" y="55" class="accent-head">// EXPERIENCE</text>
+
+    <g>
+      <circle cx="26" cy="71.5" r="2" fill="#7ee787"/>
+      <text x="35" y="75" class="role-title">Lead Software Engineer <tspan class="company-text">@ Nexus Systems</tspan></text>
+      <text x="438" y="75" class="years-text">2023 - Present</text>
+    </g>
+    <g>
+      <circle cx="26" cy="91.5" r="2" fill="#7ee787"/>
+      <text x="35" y="95" class="role-title">Full-Stack Developer <tspan class="company-text">@ VentureScale Labs</tspan></text>
+      <text x="438" y="95" class="years-text">2021 - 2023</text>
+    </g>
+    <g>
+      <circle cx="26" cy="111.5" r="2" fill="#7ee787"/>
+      <text x="35" y="115" class="role-title">Frontend &amp; SEO Engineer <tspan class="company-text">@ GrowthCraft Studio</tspan></text>
+      <text x="438" y="115" class="years-text">2019 - 2021</text>
+    </g>
+  </g>
+
+  <!-- SECTION: STACK -->
+  <g id="section-stack">
+    <text x="22" y="147" class="accent-head">// TECH STACK</text>
+
+    <!-- CORE -->
+    <g>
+      <rect x="22" y="153" width="68" height="17" rx="3.5" fill="#161b22" stroke="#30363d" stroke-width="0.8"/>
+      <text x="27" y="165" class="cat-label">CORE</text>
+    </g>
+    <g>
+      <rect x="96" y="153" width="69.0" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="102" y="165" class="tag-text">TypeScript</text>
+    </g>
+    <g>
+      <rect x="170.0" y="153" width="46.2" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="176.0" y="165" class="tag-text">Python</text>
+    </g>
+    <g>
+      <rect x="221.2" y="153" width="23.4" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="227.2" y="165" class="tag-text">Go</text>
+    </g>
+    <g>
+      <rect x="249.6" y="153" width="29.1" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="255.6" y="165" class="tag-text">SQL</text>
+    </g>
+    <!-- FRONTEND -->
+    <g>
+      <rect x="22" y="176" width="68" height="17" rx="3.5" fill="#161b22" stroke="#30363d" stroke-width="0.8"/>
+      <text x="27" y="188" class="cat-label">FRONTEND</text>
+    </g>
+    <g>
+      <rect x="96" y="176" width="40.5" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="102" y="188" class="tag-text">React</text>
+    </g>
+    <g>
+      <rect x="141.5" y="176" width="51.9" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="147.5" y="188" class="tag-text">Next.js</text>
+    </g>
+    <g>
+      <rect x="198.4" y="176" width="74.7" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="204.4" y="188" class="tag-text">TailwindCSS</text>
+    </g>
+    <g>
+      <rect x="278.1" y="176" width="69.0" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="284.1" y="188" class="tag-text">HTML5/CSS3</text>
+    </g>
+    <!-- BACKEND -->
+    <g>
+      <rect x="22" y="199" width="68" height="17" rx="3.5" fill="#161b22" stroke="#30363d" stroke-width="0.8"/>
+      <text x="27" y="211" class="cat-label">BACKEND</text>
+    </g>
+    <g>
+      <rect x="96" y="199" width="51.9" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="102" y="211" class="tag-text">Node.js</text>
+    </g>
+    <g>
+      <rect x="152.9" y="199" width="51.9" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="158.9" y="211" class="tag-text">FastAPI</text>
+    </g>
+    <g>
+      <rect x="209.8" y="199" width="69.0" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="215.8" y="211" class="tag-text">PostgreSQL</text>
+    </g>
+    <g>
+      <rect x="283.8" y="199" width="40.5" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="289.8" y="211" class="tag-text">Redis</text>
+    </g>
+    <!-- INFRA -->
+    <g>
+      <rect x="22" y="222" width="68" height="17" rx="3.5" fill="#161b22" stroke="#30363d" stroke-width="0.8"/>
+      <text x="27" y="234" class="cat-label">INFRA</text>
+    </g>
+    <g>
+      <rect x="96" y="222" width="46.2" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="102" y="234" class="tag-text">Docker</text>
+    </g>
+    <g>
+      <rect x="147.2" y="222" width="40.5" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="153.2" y="234" class="tag-text">Linux</text>
+    </g>
+    <g>
+      <rect x="192.7" y="222" width="91.8" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="198.7" y="234" class="tag-text">GitHub Actions</text>
+    </g>
+    <g>
+      <rect x="289.5" y="222" width="29.1" height="17" rx="3.5" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="295.5" y="234" class="tag-text">AWS</text>
+    </g>
+  </g>
+
+  <!-- SECTION: HIGHLIGHTS -->
+  <g id="section-highlights">
+    <text x="22" y="269" class="accent-head">// HIGHLIGHTS</text>
+
+    <g>
+      <text x="24" y="288" class="bullet-marker">&gt;</text>
+      <text x="36" y="288" class="bullet-text">Architected high-throughput microservices handling 10M+...</text>
+    </g>
+    <g>
+      <text x="24" y="308" class="bullet-marker">&gt;</text>
+      <text x="36" y="308" class="bullet-text">Spearheaded technical SEO revamp boosting organic searc...</text>
+    </g>
+    <g>
+      <text x="24" y="328" class="bullet-marker">&gt;</text>
+      <text x="36" y="328" class="bullet-text">Built automated CI/CD and deployment toolchains with su...</text>
+    </g>
+    <g>
+      <text x="24" y="348" class="bullet-marker">&gt;</text>
+      <text x="36" y="348" class="bullet-text">Exploring agentic AI systems, distributed caching, and ...</text>
+    </g>
+  </g>
+
+  <!-- Footer Status Bar -->
+  <line x1="22" y1="452" x2="438" y2="452" stroke="#21262d" stroke-width="1"/>
+  <circle cx="27" cy="466" r="3" fill="#7ee787"/>
+  <text x="36" y="469" class="status-text">status: active &amp; shipping</text>
+  <text x="438" y="469" class="status-text" text-anchor="end">sys: linux · term: zsh<tspan fill="#7ee787">_</tspan></text>
+</svg>
