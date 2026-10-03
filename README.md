@@ -10,7 +10,9 @@
 </table>
 
 ## Roshan Gautam
-Full stack developer who also does SEO.
+
+Full-Stack Developer focused on AI & backend systems, with experience in SEO and digital marketing.
+
 
 <p align="left">
   <a href="https://www.linkedin.com/in/roshan-gautam-938427394/" target="_blank"><img src="https://img.shields.io/badge/LinkedIn-0d1117?style=flat-square&logo=linkedin&logoColor=58a6ff" alt="LinkedIn" /></a>
