@@ -3,11 +3,11 @@
 Pulls data from data/profile.json using shared theme.
 Features:
 - Pure CSS animations (works inside <img> tags)
-- Staggered section fade/slide-in animations
+- HIGHLIGHTS moved to top under terminal title bar with 3 exact specified lines
+- STACK section in the middle
+- PROJECTS section with live links and tech details
 - Blinking terminal cursor on prompt line
-- STACK section (compact category pills)
-- PROJECTS section (Markly AI & Gunaso with descriptions, tech, and live links)
-- HIGHLIGHTS section (concise 3-line max with > markers)
+- Staggered section fade/slide-in animations
 - Exact dimensions (460x480) matching leo-ascii.svg
 """
 
@@ -35,15 +35,35 @@ TEXT_MUTED = THEME.get("text_muted", "#484f58")
 FONT_FAMILY = THEME.get("font_family", "SFMono-Regular, Consolas, monospace")
 
 
-def estimate_text_width(text: str, font_size: float = 9.5) -> float:
+def estimate_text_width(text: str, font_size: float = 9.0) -> float:
     return len(text) * (font_size * 0.60)
+
+
+def wrap_text(text: str, max_chars: int = 58):
+    """Simple word-wrap for monospace text."""
+    words = text.split(" ")
+    lines = []
+    curr = []
+    curr_len = 0
+    for w in words:
+        if curr_len + len(w) + (1 if curr else 0) <= max_chars:
+            curr.append(w)
+            curr_len += len(w) + (1 if len(curr) > 1 else 0)
+        else:
+            if curr:
+                lines.append(" ".join(curr))
+            curr = [w]
+            curr_len = len(w)
+    if curr:
+        lines.append(" ".join(curr))
+    return lines
 
 
 def generate_card_svg(output_path: Path) -> None:
     terminal_title = PROFILE.get("terminal_title", "roshan@github:~$ whoami")
+    highlights_list = PROFILE.get("highlights", [])[:3]
     stack_list = PROFILE.get("stack", [])
     projects_list = PROFILE.get("projects", [])
-    highlights_list = PROFILE.get("highlights", [])[:3]
 
     svg_parts = []
 
@@ -66,31 +86,31 @@ def generate_card_svg(output_path: Path) -> None:
       @keyframes sectionSlideIn {{
         0% {{
           opacity: 0;
-          transform: translateY(10px);
+          transform: translateY(8px);
         }}
         100% {{
           opacity: 1;
           transform: translateY(0);
         }}
       }}
+      .anim-highlights {{
+        animation: sectionSlideIn 0.5s ease-out 0.20s forwards;
+        opacity: 0;
+      }}
       .anim-stack {{
-        animation: sectionSlideIn 0.6s ease-out 0.25s forwards;
+        animation: sectionSlideIn 0.5s ease-out 0.60s forwards;
         opacity: 0;
       }}
       .anim-projects {{
-        animation: sectionSlideIn 0.6s ease-out 0.65s forwards;
-        opacity: 0;
-      }}
-      .anim-highlights {{
-        animation: sectionSlideIn 0.6s ease-out 1.05s forwards;
+        animation: sectionSlideIn 0.5s ease-out 1.00s forwards;
         opacity: 0;
       }}
       .anim-footer {{
-        animation: sectionSlideIn 0.6s ease-out 1.45s forwards;
+        animation: sectionSlideIn 0.5s ease-out 1.40s forwards;
         opacity: 0;
       }}
       @media (prefers-reduced-motion: reduce) {{
-        .anim-stack, .anim-projects, .anim-highlights, .anim-footer {{
+        .anim-highlights, .anim-stack, .anim-projects, .anim-footer {{
           animation: none !important;
           opacity: 1 !important;
           transform: none !important;
@@ -100,14 +120,15 @@ def generate_card_svg(output_path: Path) -> None:
           opacity: 1 !important;
         }}
       }}
-      .cat-label {{ font-family: {FONT_FAMILY}; font-size: 9px; font-weight: 700; fill: {TEXT_SECONDARY}; letter-spacing: 0.8px; }}
-      .tag-text {{ font-family: {FONT_FAMILY}; font-size: 9px; fill: #c9d1d9; }}
-      .proj-title {{ font-family: {FONT_FAMILY}; font-size: 11.5px; font-weight: 700; fill: {TEXT_PRIMARY}; }}
-      .proj-link {{ font-family: {FONT_FAMILY}; font-size: 9.5px; fill: {ACCENT_COLOR}; font-weight: 500; }}
-      .proj-desc {{ font-family: {FONT_FAMILY}; font-size: 9.5px; fill: #c9d1d9; }}
+      .bullet-marker {{ font-family: {FONT_FAMILY}; font-size: 10.5px; font-weight: 700; fill: {ACCENT_COLOR}; }}
+      .bullet-strong {{ font-family: {FONT_FAMILY}; font-size: 9.5px; font-weight: 700; fill: {TEXT_PRIMARY}; }}
+      .bullet-text {{ font-family: {FONT_FAMILY}; font-size: 9px; fill: #c9d1d9; }}
+      .cat-label {{ font-family: {FONT_FAMILY}; font-size: 8.5px; font-weight: 700; fill: {TEXT_SECONDARY}; letter-spacing: 0.8px; }}
+      .tag-text {{ font-family: {FONT_FAMILY}; font-size: 8.5px; fill: #c9d1d9; }}
+      .proj-title {{ font-family: {FONT_FAMILY}; font-size: 11px; font-weight: 700; fill: {TEXT_PRIMARY}; }}
+      .proj-link {{ font-family: {FONT_FAMILY}; font-size: 9px; fill: {ACCENT_COLOR}; font-weight: 500; }}
+      .proj-desc {{ font-family: {FONT_FAMILY}; font-size: 9px; fill: #c9d1d9; }}
       .proj-tech {{ font-family: {FONT_FAMILY}; font-size: 8.5px; fill: {TEXT_SECONDARY}; }}
-      .bullet-marker {{ font-family: {FONT_FAMILY}; font-size: 11px; font-weight: 700; fill: {ACCENT_COLOR}; }}
-      .bullet-text {{ font-family: {FONT_FAMILY}; font-size: 9.5px; fill: #c9d1d9; }}
       .status-text {{ font-family: {FONT_FAMILY}; font-size: 9px; fill: {TEXT_MUTED}; }}
     </style>
   </defs>
@@ -130,54 +151,93 @@ def generate_card_svg(output_path: Path) -> None:
   </text>
 """)
 
-    # 1. STACK SECTION
-    stack_y_start = 50
+    # 1. HIGHLIGHTS SECTION (TOP: Right under terminal title bar)
+    hl_y_start = 50
     svg_parts.append(f"""
-  <!-- SECTION: STACK (Animated) -->
+  <!-- SECTION: HIGHLIGHTS (Top) -->
+  <g id="section-highlights" class="anim-highlights">
+    <text x="22" y="{hl_y_start}" class="accent-head">// HIGHLIGHTS</text>
+""")
+
+    bullet_y = hl_y_start + 16
+    for hl in highlights_list[:3]:
+        raw_text = hl
+        if raw_text.startswith(">"):
+            raw_text = raw_text.lstrip(">").strip()
+
+        # Split at colon if present for strong label styling
+        if ":" in raw_text:
+            title_part, rest_part = raw_text.split(":", 1)
+            first_line_prefix = f"{title_part}: "
+            full_line_text = f"{title_part}:{rest_part}"
+        else:
+            first_line_prefix = ""
+            full_line_text = raw_text
+
+        wrapped = wrap_text(full_line_text, max_chars=54)
+
+        # Draw bullet marker and wrapped lines
+        svg_parts.append(f"""    <g>
+      <text x="24" y="{bullet_y}" class="bullet-marker">&gt;</text>""")
+
+        for line_idx, line_str in enumerate(wrapped):
+            line_y = bullet_y + (line_idx * 12)
+            escaped_line = html.escape(line_str)
+            svg_parts.append(f'      <text x="36" y="{line_y}" class="bullet-text">{escaped_line}</text>')
+
+        svg_parts.append("    </g>")
+        bullet_y += (len(wrapped) * 12) + 6
+
+    svg_parts.append("  </g>")
+
+    # 2. STACK SECTION (Middle)
+    stack_y_start = bullet_y + 4
+    svg_parts.append(f"""
+  <!-- SECTION: STACK (Middle) -->
   <g id="section-stack" class="anim-stack">
     <text x="22" y="{stack_y_start}" class="accent-head">// TECH STACK</text>
 """)
 
-    row_y = stack_y_start + 18
+    row_y = stack_y_start + 16
     for group in stack_list[:4]:
         cat_name = html.escape(group.get("category", ""))
         tags = group.get("tags", [])
-        cat_box_w = 64
+        cat_box_w = 62
 
         svg_parts.append(f"""    <!-- {cat_name} -->
     <g>
-      <rect x="22" y="{row_y - 12}" width="{cat_box_w}" height="16" rx="3" fill="{CARD_BG}" stroke="{BORDER_COLOR}" stroke-width="0.8"/>
+      <rect x="22" y="{row_y - 11}" width="{cat_box_w}" height="15" rx="3" fill="{CARD_BG}" stroke="{BORDER_COLOR}" stroke-width="0.8"/>
       <text x="26" y="{row_y}" class="cat-label">{cat_name}</text>
     </g>""")
 
         tag_x = 22 + cat_box_w + 5
         for tag in tags:
             tag_escaped = html.escape(tag)
-            text_w = estimate_text_width(tag, 9.0)
+            text_w = estimate_text_width(tag, 8.5)
             pill_w = round(text_w + 10, 1)
 
             if tag_x + pill_w > WIDTH - 18:
                 break
 
             svg_parts.append(f"""    <g>
-      <rect x="{tag_x}" y="{row_y - 12}" width="{pill_w}" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <rect x="{tag_x}" y="{row_y - 11}" width="{pill_w}" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
       <text x="{tag_x + 5}" y="{row_y}" class="tag-text">{tag_escaped}</text>
     </g>""")
             tag_x += pill_w + 4
 
-        row_y += 21
+        row_y += 19
 
     svg_parts.append("  </g>")
 
-    # 2. PROJECTS SECTION
-    proj_y_start = row_y + 10
+    # 3. PROJECTS SECTION (Bottom of content)
+    proj_y_start = row_y + 8
     svg_parts.append(f"""
-  <!-- SECTION: PROJECTS (Animated) -->
+  <!-- SECTION: PROJECTS (Bottom) -->
   <g id="section-projects" class="anim-projects">
     <text x="22" y="{proj_y_start}" class="accent-head">// FEATURED PROJECTS</text>
 """)
 
-    p_item_y = proj_y_start + 18
+    p_item_y = proj_y_start + 16
     for proj in projects_list[:2]:
         p_name = html.escape(proj.get("name", ""))
         p_desc = html.escape(proj.get("description", ""))
@@ -191,7 +251,7 @@ def generate_card_svg(output_path: Path) -> None:
       <text x="35" y="{p_item_y}" class="proj-title">{p_name}</text>
 """)
 
-        # Links on the right
+        # Links on right
         link_str_parts = []
         for lk in p_links:
             lbl = html.escape(lk.get("label", "link"))
@@ -201,50 +261,23 @@ def generate_card_svg(output_path: Path) -> None:
             svg_parts.append(f'      <text x="{WIDTH - 22}" y="{p_item_y}" class="proj-link" text-anchor="end">{combined_links}</text>')
 
         # Description line
-        svg_parts.append(f'      <text x="35" y="{p_item_y + 14}" class="proj-desc">{p_desc}</text>')
+        svg_parts.append(f'      <text x="35" y="{p_item_y + 13}" class="proj-desc">{p_desc}</text>')
         # Tech stack line
-        svg_parts.append(f'      <text x="35" y="{p_item_y + 27}" class="proj-tech">⚡ {p_tech}</text>')
+        svg_parts.append(f'      <text x="35" y="{p_item_y + 25}" class="proj-tech">⚡ {p_tech}</text>')
         svg_parts.append("    </g>")
 
-        p_item_y += 44
-
-    svg_parts.append("  </g>")
-
-    # 3. HIGHLIGHTS SECTION (3 lines max)
-    hl_y_start = p_item_y + 4
-    svg_parts.append(f"""
-  <!-- SECTION: HIGHLIGHTS (Animated) -->
-  <g id="section-highlights" class="anim-highlights">
-    <text x="22" y="{hl_y_start}" class="accent-head">// HIGHLIGHTS</text>
-""")
-
-    bullet_y = hl_y_start + 18
-    for hl in highlights_list[:3]:
-        raw_text = hl
-        if raw_text.startswith(">"):
-            raw_text = raw_text.lstrip(">").strip()
-        escaped_hl = html.escape(raw_text)
-
-        max_chars = 62
-        if len(escaped_hl) > max_chars:
-            escaped_hl = escaped_hl[:max_chars - 3] + "..."
-
-        svg_parts.append(f"""    <g>
-      <text x="24" y="{bullet_y}" class="bullet-marker">&gt;</text>
-      <text x="36" y="{bullet_y}" class="bullet-text">{escaped_hl}</text>
-    </g>""")
-        bullet_y += 18
+        p_item_y += 40
 
     svg_parts.append("  </g>")
 
     # Footer status
     svg_parts.append(f"""
-  <!-- Footer Status Bar (Animated) -->
+  <!-- Footer Status Bar -->
   <g id="section-footer" class="anim-footer">
-    <line x1="22" y1="{HEIGHT - 26}" x2="{WIDTH - 22}" y2="{HEIGHT - 26}" stroke="#21262d" stroke-width="1"/>
-    <circle cx="27" cy="{HEIGHT - 13}" r="3" fill="{ACCENT_COLOR}"/>
-    <text x="36" y="{HEIGHT - 10}" class="status-text">status: active &amp; shipping</text>
-    <text x="{WIDTH - 22}" y="{HEIGHT - 10}" class="status-text" text-anchor="end">sys: linux · term: zsh</text>
+    <line x1="22" y1="{HEIGHT - 24}" x2="{WIDTH - 22}" y2="{HEIGHT - 24}" stroke="#21262d" stroke-width="1"/>
+    <circle cx="27" cy="{HEIGHT - 12}" r="3" fill="{ACCENT_COLOR}"/>
+    <text x="36" y="{HEIGHT - 9}" class="status-text">status: active &amp; shipping</text>
+    <text x="{WIDTH - 22}" y="{HEIGHT - 9}" class="status-text" text-anchor="end">sys: linux · term: zsh</text>
   </g>
 </svg>
 """)

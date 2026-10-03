@@ -16,31 +16,31 @@
       @keyframes sectionSlideIn {
         0% {
           opacity: 0;
-          transform: translateY(10px);
+          transform: translateY(8px);
         }
         100% {
           opacity: 1;
           transform: translateY(0);
         }
       }
+      .anim-highlights {
+        animation: sectionSlideIn 0.5s ease-out 0.20s forwards;
+        opacity: 0;
+      }
       .anim-stack {
-        animation: sectionSlideIn 0.6s ease-out 0.25s forwards;
+        animation: sectionSlideIn 0.5s ease-out 0.60s forwards;
         opacity: 0;
       }
       .anim-projects {
-        animation: sectionSlideIn 0.6s ease-out 0.65s forwards;
-        opacity: 0;
-      }
-      .anim-highlights {
-        animation: sectionSlideIn 0.6s ease-out 1.05s forwards;
+        animation: sectionSlideIn 0.5s ease-out 1.00s forwards;
         opacity: 0;
       }
       .anim-footer {
-        animation: sectionSlideIn 0.6s ease-out 1.45s forwards;
+        animation: sectionSlideIn 0.5s ease-out 1.40s forwards;
         opacity: 0;
       }
       @media (prefers-reduced-motion: reduce) {
-        .anim-stack, .anim-projects, .anim-highlights, .anim-footer {
+        .anim-highlights, .anim-stack, .anim-projects, .anim-footer {
           animation: none !important;
           opacity: 1 !important;
           transform: none !important;
@@ -50,14 +50,15 @@
           opacity: 1 !important;
         }
       }
-      .cat-label { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9px; font-weight: 700; fill: #8b949e; letter-spacing: 0.8px; }
-      .tag-text { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9px; fill: #c9d1d9; }
-      .proj-title { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 11.5px; font-weight: 700; fill: #f0f6fc; }
-      .proj-link { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9.5px; fill: #7ee787; font-weight: 500; }
-      .proj-desc { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9.5px; fill: #c9d1d9; }
+      .bullet-marker { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 10.5px; font-weight: 700; fill: #7ee787; }
+      .bullet-strong { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9.5px; font-weight: 700; fill: #f0f6fc; }
+      .bullet-text { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9px; fill: #c9d1d9; }
+      .cat-label { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 8.5px; font-weight: 700; fill: #8b949e; letter-spacing: 0.8px; }
+      .tag-text { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 8.5px; fill: #c9d1d9; }
+      .proj-title { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 11px; font-weight: 700; fill: #f0f6fc; }
+      .proj-link { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9px; fill: #7ee787; font-weight: 500; }
+      .proj-desc { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9px; fill: #c9d1d9; }
       .proj-tech { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 8.5px; fill: #8b949e; }
-      .bullet-marker { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 11px; font-weight: 700; fill: #7ee787; }
-      .bullet-text { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9.5px; fill: #c9d1d9; }
       .status-text { font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; font-size: 9px; fill: #484f58; }
     </style>
   </defs>
@@ -80,143 +81,147 @@
   </text>
 
 
-  <!-- SECTION: STACK (Animated) -->
+  <!-- SECTION: HIGHLIGHTS (Top) -->
+  <g id="section-highlights" class="anim-highlights">
+    <text x="22" y="50" class="accent-head">// HIGHLIGHTS</text>
+
+    <g>
+      <text x="24" y="66" class="bullet-marker">&gt;</text>
+      <text x="36" y="66" class="bullet-text">Digital Marketing: SEO-driven growth, content strategy</text>
+      <text x="36" y="78" class="bullet-text">and campaigns that turn traffic into results.</text>
+    </g>
+    <g>
+      <text x="24" y="96" class="bullet-marker">&gt;</text>
+      <text x="36" y="96" class="bullet-text">Full Stack Web Apps: end-to-end products, from</text>
+      <text x="36" y="108" class="bullet-text">FastAPI/Next.js backends to responsive, polished</text>
+      <text x="36" y="120" class="bullet-text">frontends.</text>
+    </g>
+    <g>
+      <text x="24" y="138" class="bullet-marker">&gt;</text>
+      <text x="36" y="138" class="bullet-text">SEO: technical audits, on-page optimization and</text>
+      <text x="36" y="150" class="bullet-text">WordPress builds that actually rank.</text>
+    </g>
+  </g>
+
+  <!-- SECTION: STACK (Middle) -->
   <g id="section-stack" class="anim-stack">
-    <text x="22" y="50" class="accent-head">// TECH STACK</text>
+    <text x="22" y="172" class="accent-head">// TECH STACK</text>
 
     <!-- CORE -->
     <g>
-      <rect x="22" y="56" width="64" height="16" rx="3" fill="#161b22" stroke="#30363d" stroke-width="0.8"/>
-      <text x="26" y="68" class="cat-label">CORE</text>
+      <rect x="22" y="177" width="62" height="15" rx="3" fill="#161b22" stroke="#30363d" stroke-width="0.8"/>
+      <text x="26" y="188" class="cat-label">CORE</text>
     </g>
     <g>
-      <rect x="91" y="56" width="64.0" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="96" y="68" class="tag-text">TypeScript</text>
+      <rect x="89" y="177" width="61.0" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="94" y="188" class="tag-text">TypeScript</text>
     </g>
     <g>
-      <rect x="159.0" y="56" width="42.4" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="164.0" y="68" class="tag-text">Python</text>
+      <rect x="154.0" y="177" width="40.6" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="159.0" y="188" class="tag-text">Python</text>
     </g>
     <g>
-      <rect x="205.4" y="56" width="20.8" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="210.4" y="68" class="tag-text">Go</text>
+      <rect x="198.6" y="177" width="20.2" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="203.6" y="188" class="tag-text">Go</text>
     </g>
     <g>
-      <rect x="230.20000000000002" y="56" width="26.2" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="235.20000000000002" y="68" class="tag-text">SQL</text>
+      <rect x="222.79999999999998" y="177" width="25.3" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="227.79999999999998" y="188" class="tag-text">SQL</text>
     </g>
     <!-- FRONTEND -->
     <g>
-      <rect x="22" y="77" width="64" height="16" rx="3" fill="#161b22" stroke="#30363d" stroke-width="0.8"/>
-      <text x="26" y="89" class="cat-label">FRONTEND</text>
+      <rect x="22" y="196" width="62" height="15" rx="3" fill="#161b22" stroke="#30363d" stroke-width="0.8"/>
+      <text x="26" y="207" class="cat-label">FRONTEND</text>
     </g>
     <g>
-      <rect x="91" y="77" width="37.0" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="96" y="89" class="tag-text">React</text>
+      <rect x="89" y="196" width="35.5" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="94" y="207" class="tag-text">React</text>
     </g>
     <g>
-      <rect x="132.0" y="77" width="47.8" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="137.0" y="89" class="tag-text">Next.js</text>
+      <rect x="128.5" y="196" width="45.7" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="133.5" y="207" class="tag-text">Next.js</text>
     </g>
     <g>
-      <rect x="183.8" y="77" width="69.4" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="188.8" y="89" class="tag-text">TailwindCSS</text>
+      <rect x="178.2" y="196" width="66.1" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="183.2" y="207" class="tag-text">TailwindCSS</text>
     </g>
     <g>
-      <rect x="257.20000000000005" y="77" width="64.0" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="262.20000000000005" y="89" class="tag-text">HTML5/CSS3</text>
+      <rect x="248.29999999999998" y="196" width="61.0" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="253.29999999999998" y="207" class="tag-text">HTML5/CSS3</text>
     </g>
     <!-- BACKEND -->
     <g>
-      <rect x="22" y="98" width="64" height="16" rx="3" fill="#161b22" stroke="#30363d" stroke-width="0.8"/>
-      <text x="26" y="110" class="cat-label">BACKEND</text>
+      <rect x="22" y="215" width="62" height="15" rx="3" fill="#161b22" stroke="#30363d" stroke-width="0.8"/>
+      <text x="26" y="226" class="cat-label">BACKEND</text>
     </g>
     <g>
-      <rect x="91" y="98" width="47.8" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="96" y="110" class="tag-text">Node.js</text>
+      <rect x="89" y="215" width="45.7" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="94" y="226" class="tag-text">Node.js</text>
     </g>
     <g>
-      <rect x="142.8" y="98" width="47.8" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="147.8" y="110" class="tag-text">FastAPI</text>
+      <rect x="138.7" y="215" width="45.7" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="143.7" y="226" class="tag-text">FastAPI</text>
     </g>
     <g>
-      <rect x="194.60000000000002" y="98" width="64.0" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="199.60000000000002" y="110" class="tag-text">PostgreSQL</text>
+      <rect x="188.39999999999998" y="215" width="61.0" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="193.39999999999998" y="226" class="tag-text">PostgreSQL</text>
     </g>
     <g>
-      <rect x="262.6" y="98" width="37.0" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="267.6" y="110" class="tag-text">Redis</text>
+      <rect x="253.39999999999998" y="215" width="35.5" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="258.4" y="226" class="tag-text">Redis</text>
     </g>
     <!-- INFRA -->
     <g>
-      <rect x="22" y="119" width="64" height="16" rx="3" fill="#161b22" stroke="#30363d" stroke-width="0.8"/>
-      <text x="26" y="131" class="cat-label">INFRA</text>
+      <rect x="22" y="234" width="62" height="15" rx="3" fill="#161b22" stroke="#30363d" stroke-width="0.8"/>
+      <text x="26" y="245" class="cat-label">INFRA</text>
     </g>
     <g>
-      <rect x="91" y="119" width="42.4" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="96" y="131" class="tag-text">Docker</text>
+      <rect x="89" y="234" width="40.6" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="94" y="245" class="tag-text">Docker</text>
     </g>
     <g>
-      <rect x="137.4" y="119" width="37.0" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="142.4" y="131" class="tag-text">Linux</text>
+      <rect x="133.6" y="234" width="35.5" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="138.6" y="245" class="tag-text">Linux</text>
     </g>
     <g>
-      <rect x="178.4" y="119" width="85.6" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="183.4" y="131" class="tag-text">GitHub Actions</text>
+      <rect x="173.1" y="234" width="81.4" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="178.1" y="245" class="tag-text">GitHub Actions</text>
     </g>
     <g>
-      <rect x="268.0" y="119" width="26.2" height="16" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
-      <text x="273.0" y="131" class="tag-text">AWS</text>
+      <rect x="258.5" y="234" width="25.3" height="15" rx="3" fill="#21262d" stroke="#30363d" stroke-width="0.8"/>
+      <text x="263.5" y="245" class="tag-text">AWS</text>
     </g>
   </g>
 
-  <!-- SECTION: PROJECTS (Animated) -->
+  <!-- SECTION: PROJECTS (Bottom) -->
   <g id="section-projects" class="anim-projects">
-    <text x="22" y="162" class="accent-head">// FEATURED PROJECTS</text>
+    <text x="22" y="272" class="accent-head">// FEATURED PROJECTS</text>
 
     <!-- Project: Markly AI -->
     <g>
-      <circle cx="26" cy="176.5" r="2" fill="#7ee787"/>
-      <text x="35" y="180" class="proj-title">Markly AI</text>
+      <circle cx="26" cy="284.5" r="2" fill="#7ee787"/>
+      <text x="35" y="288" class="proj-title">Markly AI</text>
 
-      <text x="438" y="180" class="proj-link" text-anchor="end">[repo ↗]  [live ↗]</text>
-      <text x="35" y="194" class="proj-desc">TU exam answer generator with marks-based answer lengths.</text>
-      <text x="35" y="207" class="proj-tech">⚡ FastAPI · PostgreSQL · Groq · JS</text>
+      <text x="438" y="288" class="proj-link" text-anchor="end">[repo ↗]  [live ↗]</text>
+      <text x="35" y="301" class="proj-desc">TU exam answer generator with marks-based answer lengths.</text>
+      <text x="35" y="313" class="proj-tech">⚡ FastAPI · PostgreSQL · Groq · JS</text>
     </g>
     <!-- Project: Gunaso -->
     <g>
-      <circle cx="26" cy="220.5" r="2" fill="#7ee787"/>
-      <text x="35" y="224" class="proj-title">Gunaso</text>
+      <circle cx="26" cy="324.5" r="2" fill="#7ee787"/>
+      <text x="35" y="328" class="proj-title">Gunaso</text>
 
-      <text x="438" y="224" class="proj-link" text-anchor="end">[live ↗]</text>
-      <text x="35" y="238" class="proj-desc">Nepal citizen complaint portal with auto-escalation &amp; AI alerts.</text>
-      <text x="35" y="251" class="proj-tech">⚡ Next.js · Mobile App · AI Inspection</text>
+      <text x="438" y="328" class="proj-link" text-anchor="end">[live ↗]</text>
+      <text x="35" y="341" class="proj-desc">Nepal citizen complaint portal with auto-escalation &amp; AI alerts.</text>
+      <text x="35" y="353" class="proj-tech">⚡ Next.js · Mobile App · AI Inspection</text>
     </g>
   </g>
 
-  <!-- SECTION: HIGHLIGHTS (Animated) -->
-  <g id="section-highlights" class="anim-highlights">
-    <text x="22" y="272" class="accent-head">// HIGHLIGHTS</text>
-
-    <g>
-      <text x="24" y="290" class="bullet-marker">&gt;</text>
-      <text x="36" y="290" class="bullet-text">Spearheaded technical SEO revamp boosting organic impressio...</text>
-    </g>
-    <g>
-      <text x="24" y="308" class="bullet-marker">&gt;</text>
-      <text x="36" y="308" class="bullet-text">Architected high-throughput microservices handling 10M+ dai...</text>
-    </g>
-    <g>
-      <text x="24" y="326" class="bullet-marker">&gt;</text>
-      <text x="36" y="326" class="bullet-text">Open-source builder exploring agentic AI workflows &amp; mo...</text>
-    </g>
-  </g>
-
-  <!-- Footer Status Bar (Animated) -->
+  <!-- Footer Status Bar -->
   <g id="section-footer" class="anim-footer">
-    <line x1="22" y1="454" x2="438" y2="454" stroke="#21262d" stroke-width="1"/>
-    <circle cx="27" cy="467" r="3" fill="#7ee787"/>
-    <text x="36" y="470" class="status-text">status: active &amp; shipping</text>
-    <text x="438" y="470" class="status-text" text-anchor="end">sys: linux · term: zsh</text>
+    <line x1="22" y1="456" x2="438" y2="456" stroke="#21262d" stroke-width="1"/>
+    <circle cx="27" cy="468" r="3" fill="#7ee787"/>
+    <text x="36" y="471" class="status-text">status: active &amp; shipping</text>
+    <text x="438" y="471" class="status-text" text-anchor="end">sys: linux · term: zsh</text>
   </g>
 </svg>

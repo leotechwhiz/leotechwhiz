@@ -17,23 +17,20 @@
     "role_tagline": "Full Stack Developer",
     "terminal_title": "roshan@github:~$ whoami",
     "badges": {
-      "portfolio": {
-        "label": "Portfolio",
-        "url": "https://yourportfolio.com"
-      },
       "linkedin": {
         "label": "LinkedIn",
-        "url": "https://linkedin.com/in/your-linkedin"
+        "url": "https://www.linkedin.com/in/roshan-gautam-938427394/"
       },
       "instagram": {
         "label": "Instagram",
         "url": "https://instagram.com/your-instagram"
-      },
-      "github": {
-        "label": "GitHub",
-        "url": "https://github.com/leotechwhiz"
       }
     },
+    "highlights": [
+      "> Digital Marketing: SEO-driven growth, content strategy and campaigns that turn traffic into results.",
+      "> Full Stack Web Apps: end-to-end products, from FastAPI/Next.js backends to responsive, polished frontends.",
+      "> SEO: technical audits, on-page optimization and WordPress builds that actually rank."
+    ],
     "stack": [
       {
         "category": "CORE",
@@ -70,11 +67,6 @@
           { "label": "live", "url": "https://rubiso-hackthon.vercel.app" }
         ]
       }
-    ],
-    "highlights": [
-      "> Spearheaded technical SEO revamp boosting organic impressions by 180%",
-      "> Architected high-throughput microservices handling 10M+ daily events",
-      "> Open-source builder exploring agentic AI workflows & modern infra"
     ]
   }
 }
