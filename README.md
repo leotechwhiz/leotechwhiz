@@ -41,7 +41,11 @@ Full-Stack Developer focused on AI & backend systems, with experience in SEO and
 ---
 
 <p align="center">
-  <img src="https://gh-readme-profile.vercel.app/api?username=leotechwhiz&hide=forks,prs_merged,issues,contributed" height="140" alt="GitHub Profile Stats" />
+  <img
+    src="https://gh-readme-profile.vercel.app/api?username=leotechwhiz&hide=forks,prs_merged,issues,contributed&bg_color=0d1117&title_color=ffffff&text_color=c9d1d9&icon_color=7A0C1D&border_color=7A0C1D"
+    height="140"
+    alt="GitHub Profile Stats"
+  />
 </p>
 
 <p align="center">
