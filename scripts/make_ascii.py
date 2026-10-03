@@ -1,14 +1,19 @@
-"""Generate animated ASCII art portrait SVG for GitHub profile README.
+"""Generate animated ASCII art portrait SVG from source-photo.jpg.
 
-Pillow-only processing from source-photo.jpg:
-- Pure SVG + CSS animations (works inside <img> tags, no JS)
-- Line-by-line drawing animation top to bottom (typewriter wipe / fade) over ~4.3s
-- Faint glowing scanline / drawing head tracking the current row
-- Multi-layer continuous looping smoke rising above cigarette tip
-  (sparse characters . : ~ ' ` o, translateY 60-120px, sideways drift, light blur)
-- Smoke starts only after the portrait finishes drawing
-- Full prefers-reduced-motion support (shows static final frame)
-- Single accent color with brightness mapped to opacity
+Animation rules (pure CSS, no JS — works inside <img> on GitHub):
+  - Each ASCII row is revealed top-to-bottom with opacity fade,
+    animation-delay = row_index * 0.043s  →  total ~4.2s draw time.
+  - A glowing scanline bar tracks the current drawing row, then disappears.
+  - After the portrait finishes, a smoke layer above the cigarette tip loops forever:
+      4 text groups, each translating up 60-120px, drifting sideways,
+      scaling up, fading from 0.7 → 0, staggered delays 4-8s.
+      A feGaussianBlur filter adds softness.
+  - @media prefers-reduced-motion: show static final frame, hide scanline.
+
+Processing (Pillow only):
+  - Crop to head & shoulders, grayscale, boost contrast & sharpness.
+  - Resize to 110 cols × ~61 rows (0.51 aspect correction for monospace).
+  - Map brightness → RAMP index + fill-opacity bucket.
 """
 
 import html
@@ -20,358 +25,196 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.theme import THEME, PROFILE
+from scripts.theme import THEME
 
-BG_COLOR = THEME.get("background", "#0d1117")
-BORDER_COLOR = THEME.get("border", "#30363d")
-ACCENT_COLOR = THEME.get("accent", "#7ee787")
-FONT_FAMILY = THEME.get("font_family", "SFMono-Regular, Consolas, monospace")
+BG     = THEME["background"]
+BORDER = THEME["border"]
+ACCENT = THEME["accent"]
+FONT   = THEME["font_family"]
 
-WIDTH = 460
-HEIGHT = 480
-TARGET_COLS = 110
-
-RAMP = " .:-=+*#%@"
-SMOKE_RAMP = " .:~'`"
+WIDTH, HEIGHT = 460, 480
+COLS          = 110
+RAMP          = " .:-=+*#%@"
 
 
-def generate_ascii_svg(
-    photo_path: Path,
-    output_path: Path,
-    cols: int = TARGET_COLS,
-    width: int = WIDTH,
-    height: int = HEIGHT,
-) -> None:
-    if not photo_path.exists():
-        raise FileNotFoundError(f"Source photo not found: {photo_path}")
+def _process_image(path: Path):
+    img = Image.open(path)
+    w, h = img.size
+    # tight head-and-shoulders crop
+    crop = img.crop((int(w*.08), int(h*.02), int(w*.92), int(h*.94)))
+    gray = ImageOps.grayscale(crop)
+    gray = ImageEnhance.Contrast(gray).enhance(1.85)
+    gray = ImageEnhance.Sharpness(gray).enhance(1.6)
+    rows = int(COLS * (gray.height / gray.width) * 0.51)
+    return gray.resize((COLS, rows), Image.Resampling.LANCZOS), rows
 
-    # 1. Load & Crop to head and shoulders
-    img = Image.open(photo_path)
-    img_w, img_h = img.size
 
-    crop_x1 = int(img_w * 0.08)
-    crop_y1 = int(img_h * 0.02)
-    crop_x2 = int(img_w * 0.92)
-    crop_y2 = int(img_h * 0.94)
-    cropped = img.crop((crop_x1, crop_y1, crop_x2, crop_y2))
+def _opacity_bucket(b: int) -> float:
+    if b < 16:
+        return 0.0
+    return round(max(0.2, min(1.0, round((0.25 + 0.75 * b / 255) * 10) / 10)), 1)
 
-    # 2. Grayscale & Contrast Boost
-    gray = ImageOps.grayscale(cropped)
-    contrasted = ImageEnhance.Contrast(gray).enhance(1.85)
-    sharpened = ImageEnhance.Sharpness(contrasted).enhance(1.6)
 
-    # 3. Resize with monospace character aspect correction (~0.51)
-    aspect_correction = 0.51
-    rows = int(cols * (sharpened.height / sharpened.width) * aspect_correction)
-    resized = sharpened.resize((cols, rows), Image.Resampling.LANCZOS)
+def generate_ascii_svg(photo: Path, output: Path) -> None:
+    img, rows = _process_image(photo)
 
-    pad_x = 18
-    pad_y = 22
-    usable_w = width - (pad_x * 2)
-    usable_h = height - (pad_y * 2)
-    line_height = usable_h / rows
-    font_size = round(line_height * 0.98, 2)
+    pad_x, pad_y = 18, 22
+    usable_h     = HEIGHT - pad_y * 2
+    line_h       = usable_h / rows
+    font_size    = round(line_h * 0.98, 2)
 
-    # Cigarette coordinate zone (around hand/mouth)
-    cig_min_row = int(rows * 0.50)
-    cig_max_row = int(rows * 0.68)
-    cig_min_col = int(cols * 0.44)
-    cig_max_col = int(cols * 0.68)
+    ROW_DELAY      = 0.043               # seconds per row
+    DRAW_TIME      = round(rows * ROW_DELAY, 2)
+    SMOKE_START    = DRAW_TIME + 0.3
 
-    # Animation timing: total ~4.3s
-    row_delay_step = 0.070  # ~4.27s total for ~61 rows
-    total_draw_time = round(rows * row_delay_step, 2)
+    # Cigarette zone (right-centre, around hand/mouth)
+    CIG_R0, CIG_R1 = int(rows*.50), int(rows*.68)
+    CIG_C0, CIG_C1 = int(COLS*.44), int(COLS*.68)
 
-    svg_text_rows = []
-
+    # ── build text rows ───────────────────────────────────────────────────────
+    text_rows = []
     for y in range(rows):
-        current_bucket = None
-        current_text = []
-        row_spans = []
+        spans   = []
+        cur_op  = None
+        cur_buf = []
 
-        for x in range(cols):
-            b = resized.getpixel((x, y))
-            is_cig_area = (cig_min_row <= y <= cig_max_row) and (cig_min_col <= x <= cig_max_col)
-
-            if is_cig_area and b >= 200:
-                ch = "=" if (b < 235) else "#"
-                opacity = 1.0
+        def flush():
+            if not cur_buf:
+                return
+            txt = html.escape("".join(cur_buf))
+            if cur_op == 0.0:
+                spans.append(txt)
             else:
-                if b < 16:
-                    ch = " "
-                    opacity = 0.0
-                else:
-                    ramp_idx = int((b / 255.0) * (len(RAMP) - 1))
-                    ramp_idx = max(0, min(len(RAMP) - 1, ramp_idx))
-                    ch = RAMP[ramp_idx]
-                    opacity = 0.25 + 0.75 * (b / 255.0)
+                spans.append(f'<tspan fill-opacity="{cur_op:.1f}">{txt}</tspan>')
 
-            if ch == " ":
-                bucket = 0.0
+        for x in range(COLS):
+            b   = img.getpixel((x, y))
+            # boost cigarette
+            if CIG_R0 <= y <= CIG_R1 and CIG_C0 <= x <= CIG_C1 and b >= 200:
+                ch = "=" if b < 235 else "#"
+                op = 1.0
             else:
-                bucket = round(opacity * 10) / 10.0
-                bucket = max(0.2, min(1.0, bucket))
+                ch = RAMP[int(b / 255 * (len(RAMP)-1))] if b >= 16 else " "
+                op = _opacity_bucket(b)
 
-            if bucket != current_bucket:
-                if current_text:
-                    escaped_txt = html.escape("".join(current_text))
-                    if current_bucket == 0.0 or not escaped_txt.strip():
-                        row_spans.append(escaped_txt)
-                    else:
-                        row_spans.append(f'<tspan fill-opacity="{current_bucket:.1f}">{escaped_txt}</tspan>')
-                current_bucket = bucket
-                current_text = [ch]
+            if op != cur_op:
+                flush()
+                cur_op, cur_buf = op, [ch]
             else:
-                current_text.append(ch)
+                cur_buf.append(ch)
 
-        if current_text:
-            escaped_txt = html.escape("".join(current_text))
-            if current_bucket == 0.0 or not escaped_txt.strip():
-                row_spans.append(escaped_txt)
-            else:
-                row_spans.append(f'<tspan fill-opacity="{current_bucket:.1f}">{escaped_txt}</tspan>')
-
-        baseline_y = round(pad_y + (y * line_height) + (line_height * 0.82), 2)
-        row_content = "".join(row_spans)
-        row_delay = round(y * row_delay_step, 3)
-
-        svg_text_rows.append(
-            f'  <text x="{pad_x}" y="{baseline_y}" class="ascii-row r-{y}" style="animation-delay: {row_delay}s;">{row_content}</text>'
+        flush()
+        base_y  = round(pad_y + y * line_h + line_h * 0.82, 2)
+        delay   = round(y * ROW_DELAY, 3)
+        text_rows.append(
+            f'  <text x="{pad_x}" y="{base_y}" class="ar"'
+            f' style="animation-delay:{delay}s">{"".join(spans)}</text>'
         )
 
-    all_rows = "\n".join(svg_text_rows)
+    # ── smoke text groups (4 staggered loops) ────────────────────────────────
+    # Approximate pixel coords for cigarette tip on the resized grid
+    tip_x = pad_x + int(COLS * 0.55 * (WIDTH - 2*pad_x) / COLS)
+    tip_y = pad_y + int(rows * 0.57 * line_h)
 
-    # Smoke layer starts after portrait finishes drawing
-    smoke_delay_1 = round(total_draw_time + 0.1, 2)
-    smoke_delay_2 = round(total_draw_time + 1.4, 2)
-    smoke_delay_3 = round(total_draw_time + 2.7, 2)
-    smoke_delay_4 = round(total_draw_time + 4.0, 2)
+    smoke_groups = [
+        # (x_offset, chars, duration, delay_extra, drift_x)
+        (0,   ". : ~ `",  5.2, 0.0,  14),
+        (-6,  "~ . ' o",  6.0, 1.4, -12),
+        (4,   ": ~ ' `",  7.1, 2.7,  16),
+        (-3,  ". : ' o",  5.6, 4.0, -10),
+    ]
 
-    svg_content = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="100%" height="{height}" style="background-color: {BG_COLOR}; border-radius: 10px;" role="img" aria-label="Roshan Gautam Animated ASCII Portrait">
+    smoke_keyframes = ""
+    smoke_els       = []
+    for i, (xoff, chars, dur, extra, drift) in enumerate(smoke_groups):
+        kn = f"sf{i}"
+        rise = 60 + i * 15
+        smoke_keyframes += f"""
+      @keyframes {kn} {{
+        0%   {{ transform:translate(0,0) scale(.9);            opacity:0   }}
+        15%  {{ opacity:.7 }}
+        50%  {{ transform:translate({drift}px,-{rise//2}px) scale(1.15); opacity:.4 }}
+        80%  {{ transform:translate({-drift//2}px,-{int(rise*.85)}px) scale(1.35); opacity:.15 }}
+        100% {{ transform:translate({drift//3}px,-{rise}px) scale(1.5);  opacity:0   }}
+      }}"""
+        sd = round(SMOKE_START + extra, 2)
+        smoke_els.append(
+            f'    <text x="{tip_x + xoff}" y="{tip_y}" class="sc"'
+            f' style="animation:{kn} {dur}s ease-in-out {sd}s infinite">'
+            f'{html.escape(chars)}</text>'
+        )
+
+    # ── assemble SVG ─────────────────────────────────────────────────────────
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 {WIDTH} {HEIGHT}" width="100%" height="{HEIGHT}"
+     style="background:{BG};border-radius:10px;"
+     role="img" aria-label="Roshan Gautam Animated ASCII Portrait">
   <defs>
-    <!-- Light blur filter for smoke plume -->
-    <filter id="smoke-blur" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="0.45"/>
+    <filter id="sf">
+      <feGaussianBlur stdDeviation=".45"/>
     </filter>
-
     <style>
-      .ascii-row {{
-        font-family: {FONT_FAMILY};
-        font-size: {font_size}px;
-        fill: {ACCENT_COLOR};
-        white-space: pre;
-        opacity: 0;
-        animation: rowReveal 0.12s ease-out forwards;
+      .ar {{
+        font-family:{FONT}; font-size:{font_size}px;
+        fill:{ACCENT}; white-space:pre;
+        opacity:0;
+        animation:rev .12s ease-out forwards;
       }}
-
-      @keyframes rowReveal {{
-        0% {{
-          opacity: 0;
-        }}
-        100% {{
-          opacity: 1;
-        }}
+      @keyframes rev {{
+        to {{ opacity:1 }}
       }}
-
-      /* Faint drawing head / scanline tracking the current row */
-      .scanline {{
-        animation: scanlineMove {total_draw_time}s linear forwards;
-        filter: drop-shadow(0 0 3px {ACCENT_COLOR});
+      .sl {{
+        animation:scan {DRAW_TIME}s linear forwards;
       }}
-
-      @keyframes scanlineMove {{
-        0% {{
-          opacity: 0.85;
-          transform: translateY(0px);
-        }}
-        95% {{
-          opacity: 0.75;
-          transform: translateY({usable_h}px);
-        }}
-        100% {{
-          opacity: 0;
-          transform: translateY({usable_h}px);
-        }}
+      @keyframes scan {{
+        0%   {{ opacity:.8; transform:translateY(0) }}
+        95%  {{ opacity:.6; transform:translateY({usable_h}px) }}
+        100% {{ opacity:0;  transform:translateY({usable_h}px) }}
       }}
-
-      /* Smoke animation: looped upward translation with sine-like drift and fade */
-      .smoke-char {{
-        font-family: {FONT_FAMILY};
-        font-size: 11px;
-        fill: {ACCENT_COLOR};
-      }}
-
-      .smoke-puff-1 {{
-        opacity: 0;
-        animation: smokeFloat1 5.2s ease-in-out {smoke_delay_1}s infinite;
-      }}
-      .smoke-puff-2 {{
-        opacity: 0;
-        animation: smokeFloat2 6.0s ease-in-out {smoke_delay_2}s infinite;
-      }}
-      .smoke-puff-3 {{
-        opacity: 0;
-        animation: smokeFloat3 7.1s ease-in-out {smoke_delay_3}s infinite;
-      }}
-      .smoke-puff-4 {{
-        opacity: 0;
-        animation: smokeFloat4 5.6s ease-in-out {smoke_delay_4}s infinite;
-      }}
-
-      @keyframes smokeFloat1 {{
-        0% {{
-          transform: translate(0, 0) scale(0.9);
-          opacity: 0;
-        }}
-        15% {{
-          opacity: 0.7;
-        }}
-        50% {{
-          transform: translate(14px, -55px) scale(1.15);
-          opacity: 0.45;
-        }}
-        80% {{
-          transform: translate(-6px, -100px) scale(1.35);
-          opacity: 0.2;
-        }}
-        100% {{
-          transform: translate(10px, -135px) scale(1.5);
-          opacity: 0;
-        }}
-      }}
-
-      @keyframes smokeFloat2 {{
-        0% {{
-          transform: translate(0, 0) scale(0.85);
-          opacity: 0;
-        }}
-        20% {{
-          opacity: 0.65;
-        }}
-        45% {{
-          transform: translate(-12px, -48px) scale(1.1);
-          opacity: 0.4;
-        }}
-        75% {{
-          transform: translate(10px, -92px) scale(1.3);
-          opacity: 0.18;
-        }}
-        100% {{
-          transform: translate(-5px, -130px) scale(1.45);
-          opacity: 0;
-        }}
-      }}
-
-      @keyframes smokeFloat3 {{
-        0% {{
-          transform: translate(0, 0) scale(0.9);
-          opacity: 0;
-        }}
-        18% {{
-          opacity: 0.7;
-        }}
-        55% {{
-          transform: translate(16px, -62px) scale(1.2);
-          opacity: 0.35;
-        }}
-        85% {{
-          transform: translate(-5px, -108px) scale(1.4);
-          opacity: 0.15;
-        }}
-        100% {{
-          transform: translate(8px, -145px) scale(1.55);
-          opacity: 0;
-        }}
-      }}
-
-      @keyframes smokeFloat4 {{
-        0% {{
-          transform: translate(0, 0) scale(0.8);
-          opacity: 0;
-        }}
-        15% {{
-          opacity: 0.6;
-        }}
-        40% {{
-          transform: translate(-10px, -42px) scale(1.05);
-          opacity: 0.38;
-        }}
-        70% {{
-          transform: translate(12px, -88px) scale(1.25);
-          opacity: 0.18;
-        }}
-        100% {{
-          transform: translate(-4px, -125px) scale(1.4);
-          opacity: 0;
-        }}
-      }}
-
-      @media (prefers-reduced-motion: reduce) {{
-        .ascii-row {{
-          animation: none !important;
-          opacity: 1 !important;
-        }}
-        .scanline {{
-          display: none !important;
-        }}
-        .smoke-puff-1, .smoke-puff-2, .smoke-puff-3, .smoke-puff-4 {{
-          animation: none !important;
-          opacity: 0.35 !important;
-          transform: none !important;
-        }}
+      .sc {{
+        font-family:{FONT}; font-size:11px; fill:{ACCENT};
+      }}{smoke_keyframes}
+      @media(prefers-reduced-motion:reduce){{
+        .ar{{ animation:none!important; opacity:1!important }}
+        .sl{{ display:none }}
+        .sc{{ animation:none!important; opacity:.3!important }}
       }}
     </style>
   </defs>
 
-  <!-- Card Background & Border -->
-  <rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="10" fill="{BG_COLOR}" stroke="{BORDER_COLOR}" stroke-width="1"/>
-  
-  <!-- Subtle Header Accents -->
-  <circle cx="20" cy="14" r="3.5" fill="#30363d" />
-  <circle cx="30" cy="14" r="3.5" fill="#30363d" />
-  <circle cx="40" cy="14" r="3.5" fill="#30363d" />
-  <text x="{width - 18}" y="17" text-anchor="end" font-family="{FONT_FAMILY}" font-size="9" fill="#484f58">leo-portrait.sh</text>
+  <!-- border -->
+  <rect x=".5" y=".5" width="{WIDTH-1}" height="{HEIGHT-1}" rx="10"
+        fill="{BG}" stroke="{BORDER}" stroke-width="1"/>
+  <!-- tiny header chrome -->
+  <circle cx="20" cy="14" r="3.5" fill="#30363d"/>
+  <circle cx="30" cy="14" r="3.5" fill="#30363d"/>
+  <circle cx="40" cy="14" r="3.5" fill="#30363d"/>
+  <text x="{WIDTH-18}" y="17" text-anchor="end"
+        font-family="{FONT}" font-size="9" fill="#484f58">leo-portrait.sh</text>
 
-  <!-- ASCII Lines Container -->
-  <g id="ascii-art">
-{all_rows}
+  <!-- ascii art -->
+  <g id="art">
+{chr(10).join(text_rows)}
   </g>
 
-  <!-- Moving Scanline / Drawing Head -->
-  <line class="scanline" x1="{pad_x}" y1="{pad_y}" x2="{width - pad_x}" y2="{pad_y}" stroke="{ACCENT_COLOR}" stroke-width="1.5" opacity="0"/>
+  <!-- scanline drawing head -->
+  <line class="sl" x1="{pad_x}" y1="{pad_y}"
+        x2="{WIDTH-pad_x}" y2="{pad_y}"
+        stroke="{ACCENT}" stroke-width="1.5"
+        filter="drop-shadow(0 0 3px {ACCENT})"/>
 
-  <!-- Dynamic Smoke Layer (above cigarette tip, starts after draw finishes) -->
-  <g id="smoke-layer" filter="url(#smoke-blur)">
-    <g class="smoke-puff-1">
-      <text x="250" y="272" class="smoke-char">. : ~ `</text>
-      <text x="256" y="260" class="smoke-char">: ~ ' o</text>
-      <text x="262" y="246" class="smoke-char">~ ' .</text>
-    </g>
-    <g class="smoke-puff-2">
-      <text x="246" y="268" class="smoke-char">~ . ' `</text>
-      <text x="252" y="255" class="smoke-char">. : ~ o</text>
-      <text x="258" y="242" class="smoke-char">: . ~</text>
-    </g>
-    <g class="smoke-puff-3">
-      <text x="252" y="274" class="smoke-char">: ~ ' `</text>
-      <text x="258" y="262" class="smoke-char">~ ' . o</text>
-      <text x="264" y="248" class="smoke-char">. : ~</text>
-    </g>
-    <g class="smoke-puff-4">
-      <text x="248" y="270" class="smoke-char">. : ' `</text>
-      <text x="254" y="257" class="smoke-char">: ~ . o</text>
-      <text x="260" y="244" class="smoke-char">~ ' `</text>
-    </g>
+  <!-- smoke layer -->
+  <g id="smoke" filter="url(#sf)">
+{chr(10).join(smoke_els)}
   </g>
 </svg>
 """
-
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(svg_content)
-    print(f"Successfully generated animated ASCII portrait SVG at: {output_path}")
+    output.write_text(svg, encoding="utf-8")
+    print(f"Generated: {output}")
 
 
 if __name__ == "__main__":
-    photo_file = REPO_ROOT / "source-photo.jpg"
-    out_file = REPO_ROOT / "leo-ascii.svg"
-    generate_ascii_svg(photo_file, out_file)
+    generate_ascii_svg(
+        REPO_ROOT / "source-photo.jpg",
+        REPO_ROOT / "leo-ascii.svg"
+    )

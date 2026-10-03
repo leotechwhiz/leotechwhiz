@@ -1,7 +1,7 @@
 <table border="0" style="border: none; border-collapse: collapse; width: 100%;">
   <tr style="border: none;">
     <td width="50%" align="center" valign="top" style="border: none; padding: 0 4px 0 0;">
-      <img src="leo-ascii.svg" width="100%" alt="Leo ASCII Portrait" />
+      <img src="leo-ascii.svg" width="100%" alt="Roshan Gautam ASCII Portrait" />
     </td>
     <td width="50%" align="center" valign="top" style="border: none; padding: 0 0 0 4px;">
       <img src="info-card.svg" width="100%" alt="Profile Info Card" />
@@ -22,12 +22,24 @@
   </a>
 </p>
 
-I build scalable web applications and engineer search-driven growth strategies. My work bridges technical software engineering with measurable digital distribution, combining robust full-stack architecture with deep technical SEO and performance optimization. From designing high-throughput backends in FastAPI to crafting high-converting Next.js and WordPress experiences, I focus on shipping software that delivers business impact and actually ranks.
+I build scalable web applications and engineer search-driven growth strategies. My work spans full-stack product engineering and technical SEO — from high-throughput FastAPI and Next.js backends to on-page optimization and WordPress builds that convert and rank. I care about shipping software that has measurable impact.
 
 Open to full stack and digital marketing/SEO roles. Let's connect on LinkedIn.
 
 <br/>
 
-<a href="contrib-heatmap.svg">
-  <img src="contrib-heatmap.svg" width="100%" alt="GitHub Contribution Heatmap" />
-</a>
+## 📊 GitHub Activity
+
+<p align="center">
+  <img src="https://gh-readme-profile.vercel.app/api?username=leotechwhiz&hide=forks,prs_merged,issues,contributed" alt="GitHub profile statistics">
+</p>
+
+<h2 align="center">Contribution Activity</h2>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/leotechwhiz/leotechwhiz/output/github-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/leotechwhiz/leotechwhiz/output/github-snake.svg" />
+    <img alt="GitHub Contribution Snake" src="https://raw.githubusercontent.com/leotechwhiz/leotechwhiz/output/github-snake.svg" />
+  </picture>
+</p>
