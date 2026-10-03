@@ -1,0 +1,83 @@
+{
+  "theme": {
+    "background": "#0d1117",
+    "card_bg": "#161b22",
+    "border": "#30363d",
+    "accent": "#7ee787",
+    "accent_dim": "#238636",
+    "accent_glow": "rgba(126, 231, 135, 0.15)",
+    "text_primary": "#f0f6fc",
+    "text_secondary": "#8b949e",
+    "text_muted": "#484f58",
+    "font_family": "SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace"
+  },
+  "profile": {
+    "name": "Leo",
+    "username": "leotechwhiz",
+    "role_tagline": "Developer · SEO · Builder",
+    "terminal_title": "leo@github:~$ whoami",
+    "badges": [
+      {
+        "label": "Portfolio",
+        "url": "https://leo.dev",
+        "logo": "safari"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://linkedin.com/in/leotechwhiz",
+        "logo": "linkedin"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://instagram.com/leotechwhiz",
+        "logo": "instagram"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/leotechwhiz",
+        "logo": "github"
+      }
+    ],
+    "experience": [
+      {
+        "role": "Lead Software Engineer",
+        "company": "Nexus Systems",
+        "years": "2023 - Present"
+      },
+      {
+        "role": "Full-Stack Developer",
+        "company": "VentureScale Labs",
+        "years": "2021 - 2023"
+      },
+      {
+        "role": "Frontend & SEO Engineer",
+        "company": "GrowthCraft Studio",
+        "years": "2019 - 2021"
+      }
+    ],
+    "stack": [
+      {
+        "category": "CORE",
+        "tags": ["TypeScript", "Python", "Go", "SQL"]
+      },
+      {
+        "category": "FRONTEND",
+        "tags": ["React", "Next.js", "TailwindCSS", "HTML5/CSS3"]
+      },
+      {
+        "category": "BACKEND",
+        "tags": ["Node.js", "FastAPI", "PostgreSQL", "Redis"]
+      },
+      {
+        "category": "INFRA",
+        "tags": ["Docker", "Linux", "GitHub Actions", "AWS"]
+      }
+    ],
+    "highlights": [
+      "> Architected high-throughput microservices handling 10M+ daily events",
+      "> Spearheaded technical SEO revamp boosting organic search impressions by 180%",
+      "> Built automated CI/CD and deployment toolchains with sub-minute rollouts",
+      "> Exploring agentic AI systems, distributed caching, and modern web architectures"
+    ]
+  }
+}
