@@ -17,9 +17,6 @@
   <a href="https://www.linkedin.com/in/roshan-gautam-938427394/" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-0d1117?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
   </a>
-  <a href="https://instagram.com/your-instagram" target="_blank">
-    <img src="https://img.shields.io/badge/Instagram-0d1117?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram" />
-  </a>
 </p>
 
 I build scalable web applications and engineer search-driven growth strategies. My work spans full-stack product engineering and technical SEO — from high-throughput FastAPI and Next.js backends to on-page optimization and WordPress builds that convert and rank. I care about shipping software that has measurable impact.
