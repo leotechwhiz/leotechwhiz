@@ -68,8 +68,8 @@
         "description": "Inventory & sales system for a mobile accessories shop with stock tracking and profit reports.",
         "tech": "React · Vite · Supabase · PWA",
         "links": [
-          { "label": "repo", "url": "https://github.com/leotechwhiz/REPO-NAME" },
-          { "label": "live", "url": "https://LIVE-URL" }
+          { "label": "repo", "url": "https://github.com/leotechwhiz/Inventory-Management-System_TheMukhiyastore" },
+          { "label": "live", "url": "https://inventory-management-system-the-muk-ten.vercel.app/" }
         ]
       },
       {
