@@ -64,6 +64,15 @@
         ]
       },
       {
+        "name": "Mukhiya Store Inventory",
+        "description": "Inventory & sales system for a mobile accessories shop with stock tracking and profit reports.",
+        "tech": "React · Vite · Supabase · PWA",
+        "links": [
+          { "label": "repo", "url": "https://github.com/leotechwhiz/REPO-NAME" },
+          { "label": "live", "url": "https://LIVE-URL" }
+        ]
+      },
+      {
         "name": "SEO Case Studies",
         "description": "Technical audits, on-page SEO frameworks & organic growth blueprints.",
         "tech": "Technical SEO · Schema · GSC",
