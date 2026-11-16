@@ -102,24 +102,29 @@
     <rect x="332.6" y="171.0" width="43.6" height="14" rx="3" fill="var(--pill-bg)" stroke="var(--border)" stroke-width=".8"/>
     <text x="337.6" y="181.0" class="tt">SEMrush</text>
   </g>
-  <g id="projects">
-    <text x="22" y="205.0" class="ah">// FEATURED WORK</text>
-    <circle cx="26" cy="215.5" r="2" fill="var(--accent1)"/>
-    <text x="35" y="219.0" class="pt">Markly AI</text>
-    <text x="438" y="219.0" class="pl" text-anchor="end">[repo ↗]  [live ↗]</text>
-    <text x="35" y="230.0" class="pd">TU exam answer generator with marks-based answer lengths.</text>
-    <text x="35" y="240.0" class="pk">⚡ FastAPI · PostgreSQL · Groq</text>
-    <circle cx="26" cy="248.5" r="2" fill="var(--accent1)"/>
-    <text x="35" y="252.0" class="pt">Gunaso</text>
-    <text x="438" y="252.0" class="pl" text-anchor="end">[repo ↗]  [live ↗]</text>
-    <text x="35" y="263.0" class="pd">Citizen complaint portal with auto-escalation &amp; AI inspection.</text>
-    <text x="35" y="273.0" class="pk">⚡ Next.js · Supabase · PWA</text>
-    <circle cx="26" cy="281.5" r="2" fill="var(--accent1)"/>
-    <text x="35" y="285.0" class="pt">SEO Case Studies</text>
-    <text x="438" y="285.0" class="pl" text-anchor="end">[repo ↗]</text>
-    <text x="35" y="296.0" class="pd">Technical audits, on-page SEO frameworks &amp; organic growth blueprints.</text>
-    <text x="35" y="306.0" class="pk">⚡ Technical SEO · Schema · GSC</text>
-  </g>
+<g id="projects">
+  <text x="22" y="205.0" class="ah">// FEATURED WORK</text>
+  <circle cx="26" cy="215.5" r="2" fill="var(--accent1)"/>
+  <text x="35" y="219.0" class="pt">Markly AI</text>
+  <text x="438" y="219.0" class="pl" text-anchor="end">[repo ↗]  [live ↗]</text>
+  <text x="35" y="230.0" class="pd">TU exam answer generator with marks-based answer lengths.</text>
+  <text x="35" y="240.0" class="pk">⚡ FastAPI · PostgreSQL · Groq</text>
+  <circle cx="26" cy="248.5" r="2" fill="var(--accent1)"/>
+  <text x="35" y="252.0" class="pt">Gunaso</text>
+  <text x="438" y="252.0" class="pl" text-anchor="end">[repo ↗]  [live ↗]</text>
+  <text x="35" y="263.0" class="pd">Citizen complaint portal with auto-escalation &amp; AI inspection.</text>
+  <text x="35" y="273.0" class="pk">⚡ Next.js · Supabase · PWA</text>
+  <circle cx="26" cy="281.5" r="2" fill="var(--accent1)"/>
+  <text x="35" y="285.0" class="pt">Mukhiya Store Inventory</text>
+  <text x="438" y="285.0" class="pl" text-anchor="end">[repo ↗]  [live ↗]</text>
+  <text x="35" y="296.0" class="pd">Inventory &amp; sales system for a mobile accessories shop.</text>
+  <text x="35" y="306.0" class="pk">⚡ React · Vite · Supabase · PWA</text>
+  <circle cx="26" cy="314.5" r="2" fill="var(--accent1)"/>
+  <text x="35" y="318.0" class="pt">SEO Case Studies</text>
+  <text x="438" y="318.0" class="pl" text-anchor="end">[repo ↗]</text>
+  <text x="35" y="329.0" class="pd">Technical audits, on-page SEO frameworks &amp; organic growth blueprints.</text>
+  <text x="35" y="339.0" class="pk">⚡ Technical SEO · Schema · GSC</text>
+</g>
   <g id="footer">
     <line x1="22" y1="458" x2="438" y2="458" stroke="var(--border)" stroke-width="1"/>
     <circle cx="27" cy="469" r="3" fill="var(--accent2)"/>
