@@ -32,7 +32,7 @@ Full-Stack Developer focused on AI & backend systems, with experience in SEO and
 | :--- | :--- | :--- |
 | **Markly AI** | TU exam answer generator with marks-based answer lengths. | [Live](https://markly-ai-2.vercel.app) · [Repo](https://github.com/leotechwhiz/Markly-AI) |
 | **Gunaso** | Citizen complaint portal for Nepal with auto-escalation and AI inspection. | [Live](https://gunaso-five.vercel.app) · [Repo](https://github.com/leotechwhiz/Gunaso) |
-| **Mukhiya Store Inventory** | Inventory and sales system for a mobile accessories shop with stock tracking and profit reports. | [Live]([https://LIVE-URL](https://inventory-management-system-the-muk-ten.vercel.app/)) · [Repo](https://github.com/leotechwhiz/REPO-NAME) |
+| **Mukhiya Store Inventory** | Inventory and sales system for a mobile accessories shop with stock tracking and profit reports. | [Live](https://inventory-management-system-the-muk-ten.vercel.app/) · [Repo](https://github.com/leotechwhiz/Inventory-Management-System_TheMukhiyastore) |
 | **SEO Case Studies** | Real-world technical SEO audits, site architecture fixes, and growth blueprints. | [Repo](https://github.com/leotechwhiz/seo-case-studies) |
 
 ### Tech stack
